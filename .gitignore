@@ -49,10 +49,3 @@ desktop.ini
 Thumbs.db
 .DS_Store
 
-# Local Report Generation Scratch and Binaries
-__pycache__/
-*.py[cod]
-CareerConnect_Mini_Project_Report.docx
-CareerConnect_Mini_Project_Report.pdf
-report_assets/
-
