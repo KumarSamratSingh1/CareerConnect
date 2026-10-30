@@ -24,3 +24,4 @@ ENV PORT=8080
 ENV JAVA_OPTS="-Xmx384m -Xms192m -XX:+UseG1GC -XX:MaxRAMPercentage=75.0"
 
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -Dserver.port=${PORT} -jar app.jar"]
+
