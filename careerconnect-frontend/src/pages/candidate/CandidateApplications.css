@@ -1,0 +1,75 @@
+/* Candidate Applications Styles */
+
+.applications-filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .applications-filter-bar {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.applications-filter-bar__search {
+  max-width: 320px;
+  width: 100%;
+}
+
+.applications-filter-bar__select {
+  width: 220px;
+}
+
+/* Status Timeline in Details Modal */
+.app-details-timeline {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.app-details-timeline::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 6px;
+  width: 2px;
+  background: var(--border-subtle);
+}
+
+.app-details-timeline__step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.app-details-timeline__dot {
+  position: absolute;
+  left: -1.5rem;
+  top: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-primary-600);
+  border: 2px solid var(--bg-card);
+  box-shadow: 0 0 0 2px var(--color-primary-600);
+}
+
+.app-details-timeline__status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.app-details-timeline__date {
+  font-size: 0.75rem;
+  color: var(--color-text-muted, #94a3b8);
+}

@@ -1,0 +1,174 @@
+/* Candidate Profile Styles */
+
+.candidate-profile-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Avatar Card */
+.profile-avatar-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.profile-avatar-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  font-size: 1.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  margin-bottom: 0.75rem;
+}
+
+.profile-avatar-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text-main, #0f172a);
+  margin: 0 0 0.25rem 0;
+}
+
+.profile-avatar-email {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary, #64748b);
+  margin: 0 0 0.75rem 0;
+}
+
+/* Skills Chip Cloud */
+.profile-skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.profile-skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.375rem 0.75rem;
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  color: #1e40af;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.profile-skill-chip:hover {
+  background: #dbeafe;
+}
+
+.profile-skill-remove-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: #3b82f6;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 0.2rem;
+  border-radius: 50%;
+  transition: color 0.15s ease;
+}
+
+.profile-skill-remove-btn:hover {
+  color: #ef4444;
+}
+
+/* Timeline Cards for Education & Experience */
+.profile-timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.profile-timeline-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.125rem;
+  border: 1px solid var(--color-border-subtle, #e2e8f0);
+  border-radius: var(--radius-lg, 12px);
+  background: #ffffff;
+  transition: border-color 0.2s ease;
+}
+
+.profile-timeline-item:hover {
+  border-color: #cbd5e1;
+}
+
+.profile-timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.profile-timeline-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-main, #0f172a);
+  margin: 0 0 0.2rem 0;
+}
+
+.profile-timeline-subtitle {
+  font-size: 0.875rem;
+  color: var(--color-brand, #2563eb);
+  font-weight: 600;
+  margin: 0;
+}
+
+.profile-timeline-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary, #64748b);
+  margin-top: 0.25rem;
+}
+
+.profile-timeline-desc {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary, #475569);
+  line-height: 1.5;
+  margin: 0.5rem 0 0 0;
+  white-space: pre-wrap;
+}
+
+.profile-timeline-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Resume Box */
+.profile-resume-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: var(--radius-lg, 12px);
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .profile-resume-box {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

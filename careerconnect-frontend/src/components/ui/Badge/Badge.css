@@ -1,0 +1,266 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0.18rem 0.55rem;
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  line-height: 1.2;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  letter-spacing: 0.015em;
+  transition: all var(--transition-fast);
+  border: 1px solid transparent;
+}
+
+.badge--dot {
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-full);
+  background-color: currentColor;
+}
+
+/* GENERAL VARIANTS (LIGHT MODE) */
+.badge--primary {
+  background-color: rgba(37, 99, 235, 0.08);
+  color: #1d4ed8;
+  border-color: rgba(37, 99, 235, 0.18);
+}
+
+.badge--success {
+  background-color: rgba(16, 185, 129, 0.08);
+  color: #047857;
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.badge--warning {
+  background-color: rgba(245, 158, 11, 0.08);
+  color: #b45309;
+  border-color: rgba(245, 158, 11, 0.22);
+}
+
+.badge--danger {
+  background-color: rgba(239, 68, 68, 0.08);
+  color: #b91c1c;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.badge--info {
+  background-color: rgba(14, 165, 233, 0.08);
+  color: #0369a1;
+  border-color: rgba(14, 165, 233, 0.2);
+}
+
+.badge--neutral {
+  background-color: var(--color-slate-100);
+  color: var(--color-slate-600);
+  border-color: var(--color-slate-200);
+}
+
+/* STATUS-SPECIFIC VARIANTS (LIGHT MODE) */
+.badge--status-applied {
+  background-color: rgba(37, 99, 235, 0.08);
+  color: #1d4ed8;
+  border-color: rgba(37, 99, 235, 0.2);
+}
+
+.badge--status-under_review {
+  background-color: rgba(245, 158, 11, 0.08);
+  color: #b45309;
+  border-color: rgba(245, 158, 11, 0.22);
+}
+
+.badge--status-shortlisted {
+  background-color: rgba(124, 58, 237, 0.08);
+  color: #6d28d9;
+  border-color: rgba(124, 58, 237, 0.2);
+}
+
+.badge--status-interview_scheduled {
+  background-color: rgba(16, 185, 129, 0.08);
+  color: #047857;
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.badge--status-selected {
+  background-color: rgba(16, 185, 129, 0.12);
+  color: #047857;
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+.badge--status-rejected {
+  background-color: rgba(239, 68, 68, 0.08);
+  color: #b91c1c;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.badge--status-withdrawn {
+  background-color: var(--color-slate-100);
+  color: var(--color-slate-600);
+  border-color: var(--color-slate-200);
+}
+
+.badge--status-scheduled {
+  background-color: rgba(37, 99, 235, 0.08);
+  color: #1d4ed8;
+  border-color: rgba(37, 99, 235, 0.2);
+}
+
+.badge--status-completed {
+  background-color: rgba(16, 185, 129, 0.08);
+  color: #047857;
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.badge--status-cancelled {
+  background-color: rgba(239, 68, 68, 0.08);
+  color: #b91c1c;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.badge--status-open {
+  background-color: rgba(16, 185, 129, 0.08);
+  color: #047857;
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.badge--status-closed {
+  background-color: var(--color-slate-100);
+  color: var(--color-slate-600);
+  border-color: var(--color-slate-200);
+}
+
+.badge--status-verified {
+  background-color: rgba(37, 99, 235, 0.08);
+  color: #1d4ed8;
+  border-color: rgba(37, 99, 235, 0.2);
+}
+
+.badge--status-unverified,
+.badge--status-pending {
+  background-color: rgba(245, 158, 11, 0.08);
+  color: #b45309;
+  border-color: rgba(245, 158, 11, 0.22);
+}
+
+.badge--status-enabled {
+  background-color: rgba(16, 185, 129, 0.08);
+  color: #047857;
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.badge--status-disabled {
+  background-color: rgba(239, 68, 68, 0.08);
+  color: #b91c1c;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+/* ==========================================================================
+   DARK MODE BADGE SYSTEM
+   Soft-tinted translucent surfaces with subdued contrast
+   ========================================================================== */
+[data-theme="dark"] .badge--primary,
+.dark .badge--primary {
+  background-color: rgba(59, 130, 246, 0.14);
+  color: #93c5fd;
+  border-color: rgba(59, 130, 246, 0.28);
+}
+
+[data-theme="dark"] .badge--success,
+.dark .badge--success {
+  background-color: rgba(16, 185, 129, 0.14);
+  color: #6ee7b7;
+  border-color: rgba(16, 185, 129, 0.28);
+}
+
+[data-theme="dark"] .badge--warning,
+.dark .badge--warning {
+  background-color: rgba(245, 158, 11, 0.14);
+  color: #fcd34d;
+  border-color: rgba(245, 158, 11, 0.28);
+}
+
+[data-theme="dark"] .badge--danger,
+.dark .badge--danger {
+  background-color: rgba(239, 68, 68, 0.14);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.28);
+}
+
+[data-theme="dark"] .badge--info,
+.dark .badge--info {
+  background-color: rgba(14, 165, 233, 0.14);
+  color: #7dd3fc;
+  border-color: rgba(14, 165, 233, 0.28);
+}
+
+[data-theme="dark"] .badge--neutral,
+.dark .badge--neutral {
+  background-color: rgba(148, 163, 184, 0.12);
+  color: #cbd5e1;
+  border-color: rgba(148, 163, 184, 0.24);
+}
+
+[data-theme="dark"] .badge--status-applied,
+[data-theme="dark"] .badge--status-scheduled,
+[data-theme="dark"] .badge--status-verified,
+.dark .badge--status-applied,
+.dark .badge--status-scheduled,
+.dark .badge--status-verified {
+  background-color: rgba(59, 130, 246, 0.14);
+  color: #93c5fd;
+  border-color: rgba(59, 130, 246, 0.28);
+}
+
+[data-theme="dark"] .badge--status-under_review,
+[data-theme="dark"] .badge--status-unverified,
+[data-theme="dark"] .badge--status-pending,
+.dark .badge--status-under_review,
+.dark .badge--status-unverified,
+.dark .badge--status-pending {
+  background-color: rgba(245, 158, 11, 0.14);
+  color: #fcd34d;
+  border-color: rgba(245, 158, 11, 0.28);
+}
+
+[data-theme="dark"] .badge--status-shortlisted,
+.dark .badge--status-shortlisted {
+  background-color: rgba(139, 92, 246, 0.14);
+  color: #c4b5fd;
+  border-color: rgba(139, 92, 246, 0.28);
+}
+
+[data-theme="dark"] .badge--status-interview_scheduled,
+[data-theme="dark"] .badge--status-selected,
+[data-theme="dark"] .badge--status-completed,
+[data-theme="dark"] .badge--status-open,
+[data-theme="dark"] .badge--status-enabled,
+.dark .badge--status-interview_scheduled,
+.dark .badge--status-selected,
+.dark .badge--status-completed,
+.dark .badge--status-open,
+.dark .badge--status-enabled {
+  background-color: rgba(16, 185, 129, 0.14);
+  color: #6ee7b7;
+  border-color: rgba(16, 185, 129, 0.28);
+}
+
+[data-theme="dark"] .badge--status-rejected,
+[data-theme="dark"] .badge--status-cancelled,
+[data-theme="dark"] .badge--status-disabled,
+.dark .badge--status-rejected,
+.dark .badge--status-cancelled,
+.dark .badge--status-disabled {
+  background-color: rgba(239, 68, 68, 0.14);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.28);
+}
+
+[data-theme="dark"] .badge--status-withdrawn,
+[data-theme="dark"] .badge--status-closed,
+.dark .badge--status-withdrawn,
+.dark .badge--status-closed {
+  background-color: rgba(148, 163, 184, 0.12);
+  color: #94a3b8;
+  border-color: rgba(148, 163, 184, 0.24);
+}

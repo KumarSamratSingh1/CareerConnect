@@ -1,0 +1,94 @@
+.job-filters {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-6);
+  box-shadow: var(--shadow-xs);
+}
+
+.job-filters__top {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .job-filters__top {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+  .job-filters__search {
+    flex: 1;
+  }
+}
+
+.job-filters__grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-subtle);
+}
+
+@media (min-width: 640px) {
+  .job-filters__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .job-filters__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.job-filters__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px dashed var(--border-subtle);
+}
+
+.job-filters__active-pills {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.job-filters__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary-50);
+  border: 1px solid var(--color-primary-200);
+  color: var(--color-primary-700);
+  font-size: var(--font-size-xs);
+}
+
+.job-filters__pill-remove {
+  background: none;
+  border: none;
+  color: var(--color-primary-600);
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+}
+
+[data-theme="dark"] .job-filters__pill,
+.dark .job-filters__pill {
+  background-color: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.3);
+  color: #c7d2fe;
+}
+
+[data-theme="dark"] .job-filters__pill-remove,
+.dark .job-filters__pill-remove {
+  color: #a5b4fc;
+}

@@ -1,0 +1,225 @@
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: var(--z-fixed);
+  animation: modalFadeIn var(--transition-fast) ease-out;
+}
+
+@media (min-width: 1024px) {
+  .sidebar-backdrop {
+    display: none;
+  }
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  z-index: calc(var(--z-fixed) + 1);
+  transition: transform 300ms var(--ease-out-spring);
+  transform: translateX(-100%);
+}
+
+@media (min-width: 1024px) {
+  .sidebar {
+    transform: translateX(0);
+  }
+}
+
+.sidebar--open {
+  transform: translateX(0);
+}
+
+/* Header */
+.sidebar__header {
+  height: var(--navbar-height);
+  padding: 0 var(--space-5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+}
+
+.sidebar__brand-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-accent-600) 100%);
+  color: var(--color-white);
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+}
+
+.sidebar__close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.sidebar__close-btn:hover {
+  background-color: var(--bg-muted);
+  color: var(--text-primary);
+}
+
+@media (min-width: 1024px) {
+  .sidebar__close-btn {
+    display: none;
+  }
+}
+
+/* Role Badge area */
+.sidebar__role-tag {
+  padding: var(--space-4) var(--space-5) var(--space-2);
+}
+
+/* Navigation Menu */
+.sidebar__nav {
+  flex: 1;
+  padding: var(--space-3) var(--space-3);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar__link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0.65rem var(--space-3);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast), transform var(--transition-fast);
+  text-decoration: none;
+}
+
+.sidebar__link:hover {
+  background-color: var(--bg-muted);
+  color: var(--text-primary);
+  transform: translateX(2px);
+}
+
+.sidebar__link.active {
+  background-color: var(--color-primary-50);
+  color: var(--color-primary-700);
+  font-weight: var(--font-weight-semibold);
+}
+
+.sidebar__link.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  background-color: var(--color-primary-600);
+  border-radius: var(--radius-full);
+}
+
+.sidebar__link-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: currentColor;
+}
+
+/* Footer / User Profile snippet */
+.sidebar__footer {
+  padding: var(--space-4) var(--space-5);
+  border-top: 1px solid var(--border-subtle);
+  background-color: var(--bg-card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar__user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  overflow: hidden;
+}
+
+.sidebar__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--color-primary-100) 0%, var(--color-primary-200) 100%);
+  color: var(--color-primary-700);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-xs);
+}
+
+.sidebar__user-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar__user-name {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar__user-role {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   DARK MODE SIDEBAR OVERRIDES
+   ========================================================================== */
+[data-theme="dark"] .sidebar__link.active,
+.dark .sidebar__link.active {
+  background-color: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+}
+
+[data-theme="dark"] .sidebar__link.active::before,
+.dark .sidebar__link.active::before {
+  background-color: #818cf8;
+}
+
+[data-theme="dark"] .sidebar__avatar,
+.dark .sidebar__avatar {
+  background: rgba(99, 102, 241, 0.2);
+  color: #c7d2fe;
+}

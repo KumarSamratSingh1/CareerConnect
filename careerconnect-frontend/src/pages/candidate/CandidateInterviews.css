@@ -1,0 +1,115 @@
+/* Candidate Interviews Styles */
+
+.interviews-tabs {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--color-border-subtle, #e2e8f0);
+  margin-bottom: 1.5rem;
+}
+
+.interviews-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  background: transparent;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-secondary, #64748b);
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.interviews-tab-btn:hover {
+  color: var(--color-text-main, #0f172a);
+}
+
+.interviews-tab-btn--active {
+  color: var(--color-brand, #2563eb);
+  border-bottom-color: var(--color-brand, #2563eb);
+}
+
+.interview-card {
+  border: 1px solid var(--color-border-subtle, #e2e8f0);
+  border-radius: var(--radius-lg, 12px);
+  background: #ffffff;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.interview-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.interview-card__main {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .interview-card__main {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
+
+.interview-card__title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.interview-card__role {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text-main, #0f172a);
+  margin: 0;
+}
+
+.interview-card__company {
+  font-size: 0.875rem;
+  color: var(--color-brand, #2563eb);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.interview-card__meta-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--color-border-subtle, #e2e8f0);
+}
+
+@media (min-width: 640px) {
+  .interview-card__meta-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.interview-card__meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary, #475569);
+}
+
+.interview-card__notes {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  color: #334155;
+  line-height: 1.5;
+}
