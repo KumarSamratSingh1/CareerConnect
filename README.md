@@ -1,10 +1,51 @@
 # CareerConnect — Full-Stack Recruitment & Career Intelligence Platform
 
-CareerConnect is an integrated, full-stack recruitment and career intelligence web platform connecting **Candidates**, **Recruiters**, and **System Administrators**. It features role-based workflows, comprehensive candidate profile management, deterministic and AI-ready Resume Intelligence, recruiter job and company management, candidate application tracking, interview scheduling, and an administrative control center.
+CareerConnect is an integrated, full-stack recruitment and career intelligence platform connecting **Candidates**, **Recruiters**, and **System Administrators**. It features role-based workflows, comprehensive candidate profile management, deterministic and AI-ready Resume Intelligence, recruiter job and company management, candidate application tracking, interview scheduling, and an administrative control center.
+
+---
+
+## 🌐 Live Production Deployments
+
+| Component | Platform | Live URL | Status |
+| :--- | :--- | :--- | :--- |
+| **Frontend Web App** | **Vercel** | **[https://careerconnect-frontend-nine.vercel.app](https://careerconnect-frontend-nine.vercel.app)** | ![Vercel](https://img.shields.io/badge/Vercel-Operational-brightgreen) |
+| **Backend REST API** | **Render** | **[https://careerconnect-backend-fx39.onrender.com](https://careerconnect-backend-fx39.onrender.com)** | ![Render](https://img.shields.io/badge/Render-Operational-brightgreen) |
+| **Database** | **Aiven MySQL** | Managed Cloud MySQL 8.4 TLS/SSL | ![Aiven](https://img.shields.io/badge/Aiven%20MySQL-Running-blue) |
+| **Source Repository** | **GitHub** | **[https://github.com/KumarSamratSingh1/CareerConnect](https://github.com/KumarSamratSingh1/CareerConnect)** | ![Git](https://img.shields.io/badge/GitHub-Public-informational) |
+| **API Health Check** | **Render** | `https://careerconnect-backend-fx39.onrender.com/api/v1/health` | `{"service":"careerconnect-backend","status":"UP"}` |
 
 ---
 
 ## 1. Project Overview & Architecture
+
+### Target Production Topology
+
+```
++-------------------------------------------------------------+
+|                     Client Web Browser                      |
++-------------------------------------------------------------+
+                              |
+                              | HTTPS (SPA Navigation)
+                              v
++-------------------------------------------------------------+
+|             Vercel Frontend (Vite + React 19)               |
+|         https://careerconnect-frontend-nine.vercel.app      |
++-------------------------------------------------------------+
+                              |
+                              | HTTPS REST API (CORS Enabled)
+                              v
++-------------------------------------------------------------+
+|             Render Backend (Docker / Spring Boot 4)         |
+|         https://careerconnect-backend-fx39.onrender.com     |
++-------------------------------------------------------------+
+                              |
+                              | MySQL TLS / SSL (Port 19016)
+                              v
++-------------------------------------------------------------+
+|             Aiven Managed MySQL Cloud Database              |
+|        careerconnect-mysql-kumarsamratsingh890-3956         |
++-------------------------------------------------------------+
+```
 
 ### Workspace Structure
 
@@ -271,8 +312,37 @@ Follow this 8-step script for an academic project presentation:
 
 ---
 
-## 7. Known Limitations
+## 7. Environment Variables Reference
 
-- **Cloud Storage**: Resume documents are processed transiently in memory for parsing and import. Long-term resume file hosting currently uses candidate-provided public URLs (e.g. Google Drive/Dropbox/portfolio link).
-- **Gemini AI Provider**: Integrated and tested with mock fallbacks; kept disabled by default (`RESUME_AI_ENABLED=false`) until live production API quota and candidate consent agreements are provisioned.
-- **Email Delivery**: Interview and status notification logs are recorded server-side; direct SMTP delivery can be enabled by configuring standard Spring Mail properties.
+### Backend (Render / Production)
+
+| Variable Name | Required | Default / Format | Description |
+| :--- | :---: | :--- | :--- |
+| `DB_URL` | **Yes** | `jdbc:mysql://<HOST>:<PORT>/<DB>?sslMode=REQUIRED` | MySQL JDBC connection string with TLS/SSL |
+| `DB_USERNAME` | **Yes** | `avnadmin` | MySQL database user |
+| `DB_PASSWORD` | **Yes** | `[SECURE]` | MySQL database password |
+| `PORT` | **Yes** | `10000` (Render) / `8080` (Local) | HTTP server port |
+| `JWT_SECRET` | **Yes** | Base64-encoded string (256+ bits) | HMAC-SHA256 signing secret for JWT tokens |
+| `JWT_EXPIRATION` | No | `86400000` (24 hours in ms) | JWT token lifespan |
+| `CORS_ALLOWED_ORIGINS` | **Yes** | Comma-separated HTTPS domains | Allowed web origins for Cross-Origin Resource Sharing |
+| `SPRING_JPA_HIBERNATE_DDL_AUTO` | No | `update` (or `validate`) | Hibernate schema strategy |
+| `RESUME_AI_ENABLED` | No | `false` | Gatekeeper flag for Gemini Resume Intelligence |
+| `ADMIN_EMAIL` | No | `admin@careerconnect.com` | Initial administrator seeder email |
+| `ADMIN_PASSWORD` | No | `[SECURE]` | Initial administrator seeder password |
+
+### Frontend (Vercel / Production)
+
+| Variable Name | Required | Example | Description |
+| :--- | :---: | :--- | :--- |
+| `VITE_API_BASE_URL` | **Yes** | `https://<render-backend-url>/api/v1` | Public HTTPS REST API base URL |
+| `VITE_GOOGLE_CLIENT_ID` | No | `[OAUTH_CLIENT_ID].apps.googleusercontent.com` | Google Identity Services OAuth Client ID |
+
+---
+
+## 8. Known Limitations & Cloud Architecture Notes
+
+- **Render Free Tier Cold Starts**: Render's free web service instances spin down after 15 minutes of inactivity. The initial incoming request may experience a ~30–50 second cold start while the Spring Boot JVM container starts up. Subsequent requests respond with sub-second latency.
+- **Aiven Cloud MySQL SSL**: Aiven MySQL instances require encrypted TLS/SSL connections (`sslMode=REQUIRED`). All entity schemas and demo seed records were verified live and non-destructively.
+- **SPA Client-Side Routing**: Handled seamlessly on Vercel through `vercel.json` rewrites (`/(.*) -> /index.html`), preventing 404s on browser reload.
+- **Resume Intelligence AI Privacy**: `RESUME_AI_ENABLED=false` is enforced in production to safeguard candidate data privacy; all parsing flows gracefully fall back to Apache PDFBox/POI rule-based deterministic extraction.
+
