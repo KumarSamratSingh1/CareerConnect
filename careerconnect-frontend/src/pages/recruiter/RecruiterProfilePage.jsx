@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { User, Phone, Briefcase, Mail, CheckCircle2, AlertCircle, Edit3, Save, Plus } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout';
-import { Card, Button, Input, LoadingSpinner, EmptyState } from '../../components/ui';
+import { Card, Button, Input, LoadingSpinner, EmptyState, useToast } from '../../components/ui';
 import { useAuth } from '../../context';
 import { recruiterService } from '../../api';
 
 export const RecruiterProfilePage = () => {
   const { user } = useAuth();
+  const toast = useToast();
   const [profile, setProfile] = useState(null);
   const [isNewProfile, setIsNewProfile] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -113,11 +114,11 @@ export const RecruiterProfilePage = () => {
         setProfile(res.data);
         setIsNewProfile(false);
         setIsEditing(false);
-        setSuccessMessage(
-          isNewProfile
-            ? 'Recruiter profile created successfully!'
-            : 'Recruiter profile updated successfully!'
-        );
+        const msg = isNewProfile
+          ? 'Recruiter profile created successfully!'
+          : 'Recruiter profile updated successfully!';
+        setSuccessMessage(msg);
+        toast.success(msg);
       }
     } catch (err) {
       const backendMessage = err.response?.data?.message;
@@ -125,7 +126,9 @@ export const RecruiterProfilePage = () => {
       if (validationData && typeof validationData === 'object') {
         setFormErrors(validationData);
       } else {
-        setError(backendMessage || err.message || 'Failed to save recruiter profile.');
+        const msg = backendMessage || err.message || 'Failed to save recruiter profile.';
+        setError(msg);
+        toast.error(msg);
       }
     } finally {
       setIsSubmitting(false);

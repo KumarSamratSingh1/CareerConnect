@@ -22,6 +22,7 @@ import {
   Pagination,
   LoadingSpinner,
   EmptyState,
+  useToast,
 } from '../../components/ui';
 import { adminService } from '../../api';
 
@@ -32,6 +33,7 @@ const VERIFICATION_FILTER_OPTIONS = [
 ];
 
 export const AdminCompaniesPage = () => {
+  const toast = useToast();
   const [companies, setCompanies] = useState([]);
   const [keyword, setKeyword] = useState('');
   const [debouncedKeyword, setDebouncedKeyword] = useState('');
@@ -117,15 +119,17 @@ export const AdminCompaniesPage = () => {
     try {
       const res = await adminService.updateCompanyVerification(company.id, nextVerified);
       if (res.success) {
-        setSuccessMessage(
-          `Company "${company.name}" has been successfully marked as ${nextVerified ? 'VERIFIED' : 'UNVERIFIED'}.`
-        );
+        const msg = `Company "${company.name}" has been successfully marked as ${nextVerified ? 'VERIFIED' : 'UNVERIFIED'}.`;
+        setSuccessMessage(msg);
+        toast.success(msg);
         setVerificationAction(null);
         setIsLoading(true);
         setRefreshKey((k) => k + 1);
       }
     } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Failed to update company verification.');
+      const msg = err.response?.data?.message || err.message || 'Failed to update company verification.';
+      setError(msg);
+      toast.error(msg);
       setVerificationAction(null);
     } finally {
       setIsSubmitting(false);

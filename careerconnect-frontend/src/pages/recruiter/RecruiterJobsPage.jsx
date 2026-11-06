@@ -29,6 +29,7 @@ import {
   Pagination,
   LoadingSpinner,
   EmptyState,
+  useToast,
 } from '../../components/ui';
 import { recruiterJobService, companyService } from '../../api';
 
@@ -52,6 +53,7 @@ const STATUS_FILTER_OPTIONS = [
 
 export const RecruiterJobsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const toast = useToast();
   const [jobs, setJobs] = useState([]);
   const [hasCompany, setHasCompany] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
@@ -326,6 +328,7 @@ export const RecruiterJobsPage = () => {
         const res = await recruiterJobService.updateJob(editingJob.id, payload);
         if (res.success) {
           setSuccessMessage(`Job "${payload.title}" updated successfully.`);
+          toast.success(`Job "${payload.title}" updated successfully.`);
           handleCloseCreateModal();
           setIsLoading(true);
           setRefreshKey((k) => k + 1);
@@ -334,6 +337,7 @@ export const RecruiterJobsPage = () => {
         const res = await recruiterJobService.createJob(payload);
         if (res.success) {
           setSuccessMessage(`Job "${payload.title}" created successfully and published as OPEN.`);
+          toast.success(`Job "${payload.title}" published successfully!`);
           handleCloseCreateModal();
           setIsLoading(true);
           setRefreshKey((k) => k + 1);
@@ -360,12 +364,15 @@ export const RecruiterJobsPage = () => {
       const res = await recruiterJobService.closeJob(closingJob.id);
       if (res.success) {
         setSuccessMessage(`Job "${closingJob.title}" has been closed.`);
+        toast.info(`Job "${closingJob.title}" has been closed.`);
         setClosingJob(null);
         setIsLoading(true);
         setRefreshKey((k) => k + 1);
       }
     } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Failed to close job.');
+      const errMsg = err.response?.data?.message || err.message || 'Failed to close job.';
+      setError(errMsg);
+      toast.error(errMsg);
       setClosingJob(null);
     } finally {
       setIsSubmitting(false);

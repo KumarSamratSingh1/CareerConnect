@@ -23,6 +23,7 @@ import {
   Pagination,
   LoadingSpinner,
   EmptyState,
+  useToast,
 } from '../../components/ui';
 import { adminService } from '../../api';
 import { useAuth } from '../../context';
@@ -42,6 +43,7 @@ const STATUS_FILTER_OPTIONS = [
 
 export const AdminUsersPage = () => {
   const { user: currentUser } = useAuth();
+  const toast = useToast();
 
   const [users, setUsers] = useState([]);
   const [keyword, setKeyword] = useState('');
@@ -127,7 +129,9 @@ export const AdminUsersPage = () => {
       (currentUser?.email && currentUser.email.toLowerCase() === user.email.toLowerCase());
 
     if (isSelf && !nextEnabled) {
-      setError('You cannot disable your own administrator account.');
+      const msg = 'You cannot disable your own administrator account.';
+      setError(msg);
+      toast.warning(msg);
       setToggleUserAction(null);
       return;
     }
@@ -137,15 +141,17 @@ export const AdminUsersPage = () => {
     try {
       const res = await adminService.updateUserEnabled(user.id, nextEnabled);
       if (res.success) {
-        setSuccessMessage(
-          `User "${user.email}" has been successfully ${nextEnabled ? 'enabled' : 'disabled'}.`
-        );
+        const msg = `User "${user.email}" has been successfully ${nextEnabled ? 'enabled' : 'disabled'}.`;
+        setSuccessMessage(msg);
+        toast.success(msg);
         setToggleUserAction(null);
         setIsLoading(true);
         setRefreshKey((k) => k + 1);
       }
     } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Failed to update user status.');
+      const msg = err.response?.data?.message || err.message || 'Failed to update user status.';
+      setError(msg);
+      toast.error(msg);
       setToggleUserAction(null);
     } finally {
       setIsSubmitting(false);

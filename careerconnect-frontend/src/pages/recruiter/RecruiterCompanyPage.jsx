@@ -16,10 +16,11 @@ import {
   Clock,
 } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout';
-import { Card, Button, Input, LoadingSpinner, EmptyState } from '../../components/ui';
+import { Card, Button, Input, LoadingSpinner, EmptyState, useToast } from '../../components/ui';
 import { companyService, recruiterService } from '../../api';
 
 export const RecruiterCompanyPage = () => {
+  const toast = useToast();
   const [company, setCompany] = useState(null);
   const [hasRecruiterProfile, setHasRecruiterProfile] = useState(true);
   const [isNewCompany, setIsNewCompany] = useState(false);
@@ -164,11 +165,11 @@ export const RecruiterCompanyPage = () => {
         setCompany(res.data);
         setIsNewCompany(false);
         setIsEditing(false);
-        setSuccessMessage(
-          isNewCompany
-            ? 'Company profile created successfully! It is now pending administrative verification.'
-            : 'Company profile updated successfully!'
-        );
+        const msg = isNewCompany
+          ? 'Company profile created successfully! It is now pending administrative verification.'
+          : 'Company profile updated successfully!';
+        setSuccessMessage(msg);
+        toast.success(msg);
       }
     } catch (err) {
       const backendMessage = err.response?.data?.message;
@@ -176,7 +177,9 @@ export const RecruiterCompanyPage = () => {
       if (validationData && typeof validationData === 'object') {
         setFormErrors(validationData);
       } else {
-        setError(backendMessage || err.message || 'Failed to save company profile.');
+        const msg = backendMessage || err.message || 'Failed to save company profile.';
+        setError(msg);
+        toast.error(msg);
       }
     } finally {
       setIsSubmitting(false);

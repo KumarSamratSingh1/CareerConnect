@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { Briefcase, Menu, X, ArrowRight, LogOut, User } from 'lucide-react';
 import { useAuth } from '../../../context';
-import { Button, Badge, ThemeToggle } from '../../ui';
+import { Button, Badge, ThemeToggle, useToast } from '../../ui';
 import './Navbar.css';
 
 /**
@@ -13,6 +13,7 @@ export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuth();
+  const toast = useToast();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,6 +30,7 @@ export const Navbar = () => {
   const handleSignOut = () => {
     closeMobileMenu();
     logout();
+    toast.info('You have been signed out.');
     navigate('/login');
   };
 

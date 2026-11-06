@@ -8,13 +8,15 @@ import {
   Pagination,
   EmptyState,
   ErrorState,
-  LoadingSpinner
+  LoadingSpinner,
+  useToast,
 } from '../../components/ui';
 import { JobCard } from '../../components/jobs/JobCard';
 import { savedJobService } from '../../api';
 import './CandidateSavedJobs.css';
 
 export const CandidateSavedJobsPage = () => {
+  const toast = useToast();
   const [savedJobs, setSavedJobs] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -67,10 +69,14 @@ export const CandidateSavedJobsPage = () => {
       await savedJobService.removeSavedJob(jobId);
       setSavedJobs((prev) => prev.filter((item) => (item.job?.id ?? item.id) !== jobId));
       setTotalElements((prev) => Math.max(0, prev - 1));
-      setFeedback('Job removed from your saved list.');
+      const msg = 'Job removed from your saved list.';
+      setFeedback(msg);
+      toast.info(msg);
       setTimeout(() => setFeedback(''), 3500);
     } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Failed to remove saved job.');
+      const msg = err.response?.data?.message || err.message || 'Failed to remove saved job.';
+      setError(msg);
+      toast.error(msg);
     }
   };
 

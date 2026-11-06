@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Briefcase, Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle, Clock, Sparkles, CheckCircle, Star } from 'lucide-react';
 import { useAuth } from '../../context';
 import { Navbar, Footer } from '../../components/layout';
-import { Button, Input, Card } from '../../components/ui';
+import { Button, Input, Card, useToast } from '../../components/ui';
 import './LoginPage.css';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -12,6 +12,7 @@ export const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login, loginWithGoogle } = useAuth();
+  const toast = useToast();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -65,6 +66,7 @@ export const LoginPage = () => {
         setErrorMessage('');
         setSessionExpiredNotice(false);
         const user = await loginWithGoogle(response.credential);
+        toast.success(`Welcome back, ${user.email}!`);
         handleAuthRedirect(user);
       } catch (err) {
         if (err.response) {
@@ -165,6 +167,7 @@ export const LoginPage = () => {
         localStorage.removeItem('careerconnect_remember_email');
       }
 
+      toast.success(`Welcome back, ${user.email}!`);
       handleAuthRedirect(user);
     } catch (err) {
       if (err.response) {
@@ -180,7 +183,7 @@ export const LoginPage = () => {
         }
       } else if (err.request) {
         setErrorMessage(
-          'Unable to reach the CareerConnect backend server. Please verify the Spring Boot service is running on http://localhost:8080.'
+          'Unable to reach the CareerConnect backend service. Please check your network connection or try again.'
         );
       } else {
         setErrorMessage(err.message || 'An unexpected error occurred during login.');

@@ -22,6 +22,7 @@ import {
   Pagination,
   LoadingSpinner,
   EmptyState,
+  useToast,
 } from '../../components/ui';
 import { adminService } from '../../api';
 
@@ -38,6 +39,7 @@ const JOB_TYPE_FILTER_OPTIONS = [
 ];
 
 export const AdminJobsPage = () => {
+  const toast = useToast();
   const [jobs, setJobs] = useState([]);
   const [keyword, setKeyword] = useState('');
   const [debouncedKeyword, setDebouncedKeyword] = useState('');
@@ -120,13 +122,17 @@ export const AdminJobsPage = () => {
     try {
       const res = await adminService.closeJob(closingJob.id);
       if (res.success) {
-        setSuccessMessage(`Job "${closingJob.title}" has been successfully force-closed.`);
+        const msg = `Job "${closingJob.title}" has been successfully force-closed.`;
+        setSuccessMessage(msg);
+        toast.info(msg);
         setClosingJob(null);
         setIsLoading(true);
         setRefreshKey((k) => k + 1);
       }
     } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Failed to close job posting.');
+      const msg = err.response?.data?.message || err.message || 'Failed to close job posting.';
+      setError(msg);
+      toast.error(msg);
       setClosingJob(null);
     } finally {
       setIsSubmitting(false);

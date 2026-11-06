@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context';
 import { Navbar, Footer } from '../../components/layout';
-import { Button, Input, Card, Badge } from '../../components/ui';
+import { Button, Input, Card, Badge, useToast } from '../../components/ui';
 import './LoginPage.css';
 import './RegisterPage.css';
 
@@ -25,6 +25,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const RegisterPage = () => {
   const navigate = useNavigate();
   const { register, loginWithGoogle } = useAuth();
+  const toast = useToast();
 
   const [role, setRole] = useState('CANDIDATE');
   const [name, setName] = useState('');
@@ -160,6 +161,7 @@ export const RegisterPage = () => {
 
       // Show success screen
       setRegistrationSuccess(true);
+      toast.success('Account created successfully! Welcome to CareerConnect.');
     } catch (err) {
       if (err.response) {
         const status = err.response.status;
@@ -174,7 +176,7 @@ export const RegisterPage = () => {
         }
       } else if (err.request) {
         setErrorMessage(
-          'Unable to reach CareerConnect backend server. Please verify the Spring Boot service is running on http://localhost:8080.'
+          'Unable to reach CareerConnect backend service. Please check your network connection or try again.'
         );
       } else {
         setErrorMessage(err.message || 'An unexpected error occurred.');

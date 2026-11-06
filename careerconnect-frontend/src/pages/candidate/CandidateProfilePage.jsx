@@ -26,7 +26,8 @@ import {
   Modal,
   EmptyState,
   ErrorState,
-  LoadingSpinner
+  LoadingSpinner,
+  useToast
 } from '../../components/ui';
 import { useAuth } from '../../context';
 import { candidateService } from '../../api';
@@ -34,6 +35,7 @@ import './CandidateProfile.css';
 
 export const CandidateProfilePage = () => {
   const { user } = useAuth();
+  const toast = useToast();
 
   // Profile data
   const [profile, setProfile] = useState(null);
@@ -150,6 +152,7 @@ export const CandidateProfilePage = () => {
   // Show temporary feedback toast
   const showFeedback = (msg) => {
     setSuccessMessage(msg);
+    toast.success(msg);
     setTimeout(() => setSuccessMessage(''), 4000);
   };
 

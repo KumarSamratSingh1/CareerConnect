@@ -25,12 +25,14 @@ import {
   Button,
   Badge,
   ErrorState,
+  useToast,
 } from '../../components/ui';
 import { candidateService, resumeService } from '../../api';
 import './ResumeImportPage.css';
 
 export const ResumeImportPage = () => {
   const navigate = useNavigate();
+  const toast = useToast();
   const fileInputRef = useRef(null);
 
   // Workflow steps: 'upload' -> 'review' -> 'success'
@@ -122,6 +124,7 @@ export const ResumeImportPage = () => {
       if (res?.success && res?.data) {
         populateDraftData(res.data);
         setStep('review');
+        toast.success('Resume parsed successfully! Review extracted data below.');
       } else {
         setParseError(res?.message || 'Failed to parse resume document.');
       }
@@ -357,6 +360,7 @@ export const ResumeImportPage = () => {
       if (res?.success && res?.data) {
         setImportSummary(res.data);
         setStep('success');
+        toast.success('Resume records imported into your profile!');
       } else {
         setImportError(res?.message || 'Import failed. No valid records imported.');
       }

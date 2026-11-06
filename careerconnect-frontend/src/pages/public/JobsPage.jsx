@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { ArrowUpDown, SlidersHorizontal } from 'lucide-react';
 import { Navbar, Footer } from '../../components/layout';
-import { Button, EmptyState, ErrorState, Pagination, JobCardSkeleton } from '../../components/ui';
+import { Button, EmptyState, ErrorState, Pagination, JobCardSkeleton, useToast } from '../../components/ui';
 import { JobCard, JobFilters } from '../../components/jobs';
 import { MOCK_JOBS } from '../../data/mockJobs';
 import { jobService, savedJobService } from '../../api';
@@ -70,6 +70,7 @@ export const JobsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
+  const toast = useToast();
 
   const [backendJobs, setBackendJobs] = useState([]);
   const [savedJobIds, setSavedJobIds] = useState(new Set());
@@ -139,6 +140,7 @@ export const JobsPage = () => {
 
   const handleSaveToggle = async (jobId) => {
     if (!isAuthenticated) {
+      toast.info('Please sign in as a candidate to save jobs');
       navigate('/login');
       return;
     }
@@ -153,12 +155,14 @@ export const JobsPage = () => {
           next.delete(jobId);
           return next;
         });
+        toast.info('Job removed from saved jobs');
       } else {
         await savedJobService.saveJob(jobId);
         setSavedJobIds((prev) => new Set([...prev, jobId]));
+        toast.success('Job saved to your bookmarks!');
       }
     } catch {
-      // ignore
+      toast.error('Unable to update bookmark status.');
     }
   };
 

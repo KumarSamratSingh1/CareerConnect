@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context';
 import { Navbar, Footer } from '../../components/layout';
-import { Button, Card, Badge, Modal, Input, LoadingSpinner, ErrorState } from '../../components/ui';
+import { Button, Card, Badge, Modal, Input, LoadingSpinner, ErrorState, useToast } from '../../components/ui';
 import { JobCard } from '../../components/jobs';
 import { getJobById, getRelatedJobs, MOCK_JOBS } from '../../data/mockJobs';
 import { jobService, applicationService, savedJobService } from '../../api';
@@ -28,6 +28,7 @@ export const JobDetailsPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, isAuthenticated } = useAuth();
+  const toast = useToast();
 
   const [job, setJob] = useState(null);
   const [isLoadingJob, setIsLoadingJob] = useState(true);
@@ -269,6 +270,7 @@ export const JobDetailsPage = () => {
       if (isSaved) {
         await savedJobService.removeSavedJob(job.id);
         setIsSaved(false);
+        toast.info('Job removed from your saved bookmarks.');
         setActionFeedback({
           type: 'success',
           message: 'Job removed from your saved bookmarks.'
@@ -276,12 +278,14 @@ export const JobDetailsPage = () => {
       } else {
         await savedJobService.saveJob(job.id);
         setIsSaved(true);
+        toast.success('Job successfully saved to your bookmarks!');
         setActionFeedback({
           type: 'success',
           message: 'Job successfully saved to your bookmarks!'
         });
       }
     } catch (err) {
+      toast.error('Failed to update saved job status.');
       setActionFeedback({
         type: 'warning',
         message: err.response?.data?.message || err.message || 'Failed to update saved job status.'
@@ -344,6 +348,7 @@ export const JobDetailsPage = () => {
       });
       setApplicationSubmitted(true);
       setAlreadyApplied(true);
+      toast.success(`Application submitted for ${job.title}!`);
     } catch (err) {
       setApplicationError(
         err.response?.data?.message ||

@@ -25,6 +25,7 @@ import {
   Pagination,
   LoadingSpinner,
   EmptyState,
+  useToast,
 } from '../../components/ui';
 import {
   recruiterInterviewService,
@@ -40,6 +41,7 @@ const MODE_OPTIONS = [
 ];
 
 export const RecruiterInterviewsPage = () => {
+  const toast = useToast();
   const [interviews, setInterviews] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [selectedJobId, setSelectedJobId] = useState('ALL');
@@ -237,12 +239,15 @@ export const RecruiterInterviewsPage = () => {
       );
       if (res.success) {
         setSuccessMessage('Interview session rescheduled successfully.');
+        toast.success('Interview session rescheduled successfully.');
         setRescheduleInterview(null);
         setIsLoading(true);
         setRefreshKey((k) => k + 1);
       }
     } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Failed to reschedule interview.');
+      const msg = err.response?.data?.message || err.message || 'Failed to reschedule interview.';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setIsSubmitting(false);
     }
@@ -260,13 +265,17 @@ export const RecruiterInterviewsPage = () => {
         nextStatus
       );
       if (res.success) {
-        setSuccessMessage(`Interview status updated to ${nextStatus}.`);
+        const msg = `Interview status updated to ${nextStatus}.`;
+        setSuccessMessage(msg);
+        toast.info(msg);
         setConfirmStatusAction(null);
         setIsLoading(true);
         setRefreshKey((k) => k + 1);
       }
     } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Failed to update interview status.');
+      const msg = err.response?.data?.message || err.message || 'Failed to update interview status.';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setIsSubmitting(false);
     }

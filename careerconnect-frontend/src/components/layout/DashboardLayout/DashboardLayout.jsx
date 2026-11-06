@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { Menu, User, LogOut } from 'lucide-react';
 import { Sidebar } from '../Sidebar';
-import { Button, Badge, ThemeToggle } from '../../ui';
+import { Button, Badge, ThemeToggle, useToast } from '../../ui';
 import { useAuth } from '../../../context';
 import './DashboardLayout.css';
 
@@ -18,9 +18,11 @@ export const DashboardLayout = ({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const toast = useToast();
 
   const handleSignOut = () => {
     logout();
+    toast.info('You have been signed out.');
     navigate('/login');
   };
 

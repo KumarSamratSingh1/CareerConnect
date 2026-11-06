@@ -21,6 +21,7 @@ import {
   Pagination,
   LoadingSpinner,
   EmptyState,
+  useToast,
 } from '../../components/ui';
 import {
   recruiterApplicationService,
@@ -63,6 +64,7 @@ const getAllowedStatusTransitions = (currentStatus) => {
 
 export const RecruiterApplicationsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const toast = useToast();
   const selectedJobId = searchParams.get('jobId') || 'ALL';
 
   const [jobs, setJobs] = useState([]);
@@ -233,16 +235,16 @@ export const RecruiterApplicationsPage = () => {
       );
       if (res.success && res.data) {
         setReviewApplication(res.data);
-        setSuccessMessage(
-          `Candidate application status advanced to "${newStatus.replace('_', ' ')}".`
-        );
+        const msg = `Candidate application status advanced to "${newStatus.replace('_', ' ')}".`;
+        setSuccessMessage(msg);
+        toast.success(msg);
         setIsLoading(true);
         setRefreshKey((k) => k + 1);
       }
     } catch (err) {
-      setError(
-        err.response?.data?.message || err.message || 'Failed to update application status.'
-      );
+      const errMsg = err.response?.data?.message || err.message || 'Failed to update application status.';
+      setError(errMsg);
+      toast.error(errMsg);
     } finally {
       setStatusUpdating(false);
     }
@@ -323,9 +325,9 @@ export const RecruiterApplicationsPage = () => {
       );
 
       if (res.success) {
-        setSuccessMessage(
-          `Interview scheduled successfully for ${scheduleModalApp.candidate?.fullName || 'candidate'}.`
-        );
+        const msg = `Interview scheduled successfully for ${scheduleModalApp.candidate?.fullName || 'candidate'}.`;
+        setSuccessMessage(msg);
+        toast.success(msg);
         setScheduleModalApp(null);
         if (reviewApplication?.id === scheduleModalApp.id) {
           // Re-fetch application to get updated status (INTERVIEW_SCHEDULED)

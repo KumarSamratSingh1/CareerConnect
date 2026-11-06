@@ -14,7 +14,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { useAuth } from '../../../context';
-import { Badge } from '../../ui/Badge';
+import { Badge, useToast } from '../../ui';
 import { cn } from '../../../utils/cn';
 import './Sidebar.css';
 
@@ -70,6 +70,7 @@ export const Sidebar = ({
 }) => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const toast = useToast();
   const config = ROLE_CONFIGS[role] || ROLE_CONFIGS.candidate;
 
   // ESC key listener for mobile sidebar drawer
@@ -93,6 +94,7 @@ export const Sidebar = ({
     e.preventDefault();
     if (onClose) onClose();
     logout();
+    toast.info('You have been signed out.');
     navigate('/login');
   };
 

@@ -14,7 +14,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout';
-import { Card, Badge, Button, EmptyState, ErrorState, LoadingSpinner, Modal, MetricCardSkeleton } from '../../components/ui';
+import { Card, Badge, Button, EmptyState, ErrorState, LoadingSpinner, Modal, MetricCardSkeleton, useToast } from '../../components/ui';
 import { JobCard } from '../../components/jobs/JobCard';
 import { useAuth } from '../../context';
 import {
@@ -65,6 +65,7 @@ const AnimatedMetric = ({ value }) => {
 
 export const CandidateDashboardPage = () => {
   const { user } = useAuth();
+  const toast = useToast();
 
   // State
   const [profile, setProfile] = useState(null);
@@ -191,13 +192,15 @@ export const CandidateDashboardPage = () => {
           return next;
         });
         setStats((prev) => ({ ...prev, savedJobsCount: Math.max(0, prev.savedJobsCount - 1) }));
+        toast.info('Job removed from your saved list');
       } else {
         await savedJobService.saveJob(jobId);
         setSavedJobIds((prev) => new Set([...prev, jobId]));
         setStats((prev) => ({ ...prev, savedJobsCount: prev.savedJobsCount + 1 }));
+        toast.success('Job saved to your bookmarks!');
       }
     } catch {
-      // Revert optimistic toggle or notify
+      toast.error('Unable to update saved job. Please try again.');
     }
   };
 
