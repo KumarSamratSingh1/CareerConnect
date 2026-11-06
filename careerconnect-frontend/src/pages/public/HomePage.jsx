@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Sparkles,
@@ -11,11 +11,24 @@ import {
   Cloud,
   GraduationCap,
   CheckCircle,
+  CheckCircle2,
   Users,
   Briefcase,
   ShieldCheck,
   Calendar,
-  Star
+  Star,
+  FileText,
+  Check,
+  Video,
+  Building2,
+  TrendingUp,
+  Clock,
+  ArrowUpRight,
+  Lock,
+  Layers,
+  Sliders,
+  ChevronRight,
+  CheckCheck
 } from 'lucide-react';
 import { Navbar, Footer } from '../../components/layout';
 import { Button, Badge } from '../../components/ui';
@@ -64,9 +77,6 @@ const AnimatedCounter = ({ target, suffix = '', duration = 1200 }) => {
   return <span>{count.toLocaleString()}{suffix}</span>;
 };
 
-/**
- * Maps category icon names to Lucide icon components.
- */
 const CATEGORY_ICONS = {
   Code: Code,
   Cpu: Cpu,
@@ -75,6 +85,127 @@ const CATEGORY_ICONS = {
   Cloud: Cloud,
   GraduationCap: GraduationCap
 };
+
+// Interactive discovery presets for Section 2
+const DISCOVERY_PRESETS = [
+  {
+    id: 'ai-ml',
+    category: 'Data & AI',
+    role: 'Lead Machine Learning Engineer',
+    company: 'NeuralSphere AI',
+    salary: '₹34 - 52 LPA',
+    location: 'Bangalore • Hybrid',
+    type: 'Full-time',
+    matchScore: 99,
+    skills: ['PyTorch', 'TensorFlow', 'LLMs', 'Python', 'MLOps'],
+    snippet: 'Architect generative AI pipelines, fine-tune open weights, and scale inference serving infrastructure.'
+  },
+  {
+    id: 'cloud-fullstack',
+    category: 'Engineering',
+    role: 'Principal Cloud Architect',
+    company: 'CloudScale Technologies',
+    salary: '₹38 - 56 LPA',
+    location: 'Hyderabad • Remote',
+    type: 'Full-time',
+    matchScore: 97,
+    skills: ['React', 'Spring Boot', 'AWS', 'Kubernetes', 'Kafka'],
+    snippet: 'Design distributed event-driven microservices processing over 100M daily API events with high availability.'
+  },
+  {
+    id: 'product-design',
+    category: 'Design',
+    role: 'Senior Product Designer',
+    company: 'CraftUI Labs',
+    salary: '₹22 - 35 LPA',
+    location: 'Mumbai • Hybrid',
+    type: 'Full-time',
+    matchScore: 95,
+    skills: ['Figma', 'Design Systems', 'User Research', 'Prototyping'],
+    snippet: 'Lead enterprise design systems, conduct usability tests, and craft intuitive developer-first software experiences.'
+  },
+  {
+    id: 'devops-infra',
+    category: 'Cloud & DevOps',
+    role: 'Site Reliability Engineer',
+    company: 'Nexus Infra',
+    salary: '₹26 - 40 LPA',
+    location: 'Pune • Remote',
+    type: 'Full-time',
+    matchScore: 96,
+    skills: ['Docker', 'Terraform', 'CI/CD', 'Prometheus', 'Linux'],
+    snippet: 'Drive zero-downtime blue-green deployments, maintain multi-region observability, and automate infrastructure.'
+  }
+];
+
+// Interactive Recruiter ATS Simulation items for Section 4
+const PIPELINE_DEMO_COLUMNS = [
+  {
+    id: 'applied',
+    title: 'Applied',
+    count: 24,
+    badgeVariant: 'primary',
+    candidates: [
+      { name: 'Aarav Patel', role: 'Full Stack Engineer', match: 96, school: 'IIT Bombay', tag: 'Spring + React' },
+      { name: 'Sneha Rao', role: 'Cloud SDE Intern', match: 92, school: 'BITS Pilani', tag: 'AWS + Docker' }
+    ]
+  },
+  {
+    id: 'under_review',
+    title: 'Under Review',
+    count: 12,
+    badgeVariant: 'warning',
+    candidates: [
+      { name: 'Kavya Sharma', role: 'Backend Developer', match: 98, school: 'NIT Trichy', tag: 'Java + Microservices' }
+    ]
+  },
+  {
+    id: 'shortlisted',
+    title: 'Shortlisted',
+    count: 5,
+    badgeVariant: 'info',
+    candidates: [
+      { name: 'Rohan Mehta', role: 'DevOps Specialist', match: 95, school: 'IIIT Hyderabad', tag: 'K8s + Terraform' }
+    ]
+  },
+  {
+    id: 'interview_scheduled',
+    title: 'Interview Scheduled',
+    count: 3,
+    badgeVariant: 'success',
+    candidates: [
+      { name: 'Priya Verma', role: 'Senior Architect', match: 99, school: 'DTU Delhi', tag: 'Technical Round 2' }
+    ]
+  }
+];
+
+// Lifecycle steps for Section 5
+const LIFECYCLE_STEPS = [
+  {
+    number: '01',
+    title: '1-Click Intelligent Apply',
+    subtitle: 'Standardized profiles with verified credentials bypass black-hole portals.',
+    detail: 'Your verified education, git portfolio, and skills are delivered directly to the engineering hiring manager with zero third-party recruiter intermediaries.'
+  },
+  {
+    number: '02',
+    title: 'Direct Recruiter Review',
+    subtitle: 'Track your exact review state in real time without guessing.',
+    detail: 'Transparent multi-stage progress (Applied → Under Review → Shortlisted). Recruiter response SLA under 48 hours for verified engineering candidates.'
+  },
+  {
+    number: '03',
+    title: 'Integrated Video Interviews',
+    subtitle: 'Built-in interview launcher with agenda, calendar sync, and meeting links.',
+    detail: 'Receive scheduling requests with confirmed dates, interview round notes (e.g. System Design, DSA), and one-click Google Meet room access.'
+  },
+  {
+    number: '04',
+    title: 'Verified Offers & Placement',
+    subtitle: 'Transparent compensation evaluation and institutional compliance.',
+    detail: 'Structured digital offer letters with role designations, compensation breakdowns (fixed + variables), and institutional placement verification.'
+  }
+];
 
 const normalizeBackendJobForHome = (raw) => {
   const companyName =
@@ -117,6 +248,16 @@ export const HomePage = () => {
   const [category, setCategory] = useState('ALL');
   const [featuredJobs, setFeaturedJobs] = useState(() => getFeaturedJobs());
 
+  // Interactive Section 2 discovery state
+  const [activeDiscoveryId, setActiveDiscoveryId] = useState('ai-ml');
+  const activeDiscovery = useMemo(
+    () => DISCOVERY_PRESETS.find((p) => p.id === activeDiscoveryId) || DISCOVERY_PRESETS[0],
+    [activeDiscoveryId]
+  );
+
+  // Interactive Section 5 lifecycle active tab
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
+
   // Fetch real jobs from backend on mount
   useEffect(() => {
     let isCancelled = false;
@@ -139,7 +280,7 @@ export const HomePage = () => {
     };
   }, []);
 
-  // Scroll reveal observer
+  // Smooth Intersection Observer for Scroll Reveals
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -150,7 +291,7 @@ export const HomePage = () => {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
     );
 
     const elements = document.querySelectorAll('.scroll-reveal');
@@ -175,29 +316,33 @@ export const HomePage = () => {
     <div className="home-page">
       <Navbar />
 
-      {/* 1. HERO SECTION (UPGRADED COMPOSITION) */}
-      <section className="home-hero">
+      {/* ==========================================================================
+          SECTION 1: HERO EXPERIENCE ("Connect talent with opportunity")
+          ========================================================================== */}
+      <section className="home-hero" aria-label="Hero Section">
         <div className="home-hero__ambient-glow" aria-hidden="true" />
+        <div className="home-hero__ambient-secondary" aria-hidden="true" />
         <div className="home-hero__grid-pattern" aria-hidden="true" />
 
         <div className="container home-hero__container">
           <div className="home-hero__content-grid">
             {/* Left Content Column */}
             <div className="home-hero__left">
-              <div className="home-hero__pill hero-anim-1">
+              <div className="home-hero__brand-lead hero-anim-1">
                 <span className="home-hero__pill-dot" />
-                <Sparkles size={14} className="text-brand" />
-                <span>Next-Gen Recruitment & Campus Placements</span>
+                <span className="home-hero__pill-name">CareerConnect</span>
+                <span className="home-hero__pill-separator">/</span>
+                <span className="home-hero__pill-tag">Next-Gen Recruitment Platform</span>
               </div>
 
               <h1 className="home-hero__title hero-anim-2">
-                Find The Opportunity That Moves Your <br className="hidden sm:inline" />
-                <span className="home-hero__title-accent">Career Forward.</span>
+                Connect talent with <br />
+                <span className="home-hero__title-accent">opportunity.</span>
               </h1>
 
               <p className="home-hero__subtitle hero-anim-3">
-                Discover curated engineering positions, internships, and high-impact technology
-                roles at verified startups and market leaders. Intelligent matching with zero friction.
+                A modern platform built for candidate clarity and recruiter velocity. Direct applications,
+                verified company profiles, and transparent interview pipelines with zero friction.
               </p>
 
               {/* Action Buttons Row */}
@@ -212,9 +357,14 @@ export const HomePage = () => {
                     Candidate Portal
                   </Button>
                 </Link>
+                <Link to="/recruiter/dashboard" className="hidden sm:inline-flex">
+                  <Button size="lg" variant="ghost">
+                    Recruiter Hub
+                  </Button>
+                </Link>
               </div>
 
-              {/* Prominent Search UI Card */}
+              {/* Prominent Search UI Dock */}
               <div className="home-hero__search-card hero-anim-5">
                 <form onSubmit={handleHeroSearch} className="home-hero__search-form">
                   <div className="home-hero__search-input-wrap">
@@ -225,7 +375,7 @@ export const HomePage = () => {
                       <input
                         type="text"
                         className="input-field"
-                        placeholder="Job title, tech stack (e.g. React, Spring Boot, AI)..."
+                        placeholder="Search roles, skills (e.g. React, Spring Boot, AI)..."
                         value={keyword}
                         onChange={(e) => setKeyword(e.target.value)}
                         aria-label="Search jobs keyword"
@@ -241,7 +391,7 @@ export const HomePage = () => {
                         onChange={(e) => setCategory(e.target.value)}
                         aria-label="Select role category"
                       >
-                        <option value="ALL">All Categories</option>
+                        <option value="ALL">All Disciplines</option>
                         <option value="Engineering">Engineering</option>
                         <option value="Data & AI">Data & AI</option>
                         <option value="Product">Product</option>
@@ -261,8 +411,8 @@ export const HomePage = () => {
 
                 {/* Trending searches */}
                 <div className="home-hero__trending">
-                  <span className="font-semibold text-slate-700">Trending:</span>
-                  {['Full Stack', 'Spring Boot', 'React', 'AI / ML', 'SDE Intern', 'DevOps'].map((tag) => (
+                  <span className="home-hero__trending-label">Trending Tech:</span>
+                  {['Full Stack', 'Spring Boot', 'React', 'AI / ML', 'Cloud SDE', 'Kubernetes'].map((tag) => (
                     <button
                       key={tag}
                       type="button"
@@ -276,23 +426,23 @@ export const HomePage = () => {
               </div>
             </div>
 
-            {/* Right Visual Composition (Desktop) */}
+            {/* Right Visual Modular Composition (Desktop) */}
             <div className="home-hero__right hero-anim-6">
               <div className="home-hero__composition">
                 <div className="home-hero__composition-glow" aria-hidden="true" />
 
-                {/* Floating Showcase Card 1: Job Preview */}
+                {/* Main Showcase Card: Verified Job Preview */}
                 <div className="hero-floating-card hero-floating-card--main">
                   <div className="hero-floating-card__header">
-                    <div className="job-card__avatar" aria-hidden="true">
+                    <div className="hero-floating-card__avatar" aria-hidden="true">
                       T
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <span className="font-bold text-slate-900 text-sm">TechCorp Solutions</span>
-                        <Badge variant="success" size="sm" hasDot>Verified</Badge>
+                        <Badge variant="success" size="sm" hasDot>Verified Partner</Badge>
                       </div>
-                      <span className="text-xs text-slate-500 flex items-center gap-1">
+                      <span className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
                         <ShieldCheck size={12} className="text-emerald-500" /> Direct Recruiter Access
                       </span>
                     </div>
@@ -315,9 +465,16 @@ export const HomePage = () => {
                       </span>
                     ))}
                   </div>
+
+                  <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-100 text-xs">
+                    <span className="text-emerald-600 font-medium flex items-center gap-1">
+                      <CheckCircle2 size={13} /> Active pipeline
+                    </span>
+                    <span className="text-slate-400 font-mono text-2xs">Posted 2h ago</span>
+                  </div>
                 </div>
 
-                {/* Floating Showcase Pill 1: Candidate Match */}
+                {/* Satellite Module 1: 98% Match Score Badge */}
                 <div className="hero-floating-card hero-floating-card--badge-top animate-float">
                   <div className="hero-badge-pill">
                     <div className="hero-badge-pill__icon bg-amber-500 text-white">
@@ -330,15 +487,15 @@ export const HomePage = () => {
                   </div>
                 </div>
 
-                {/* Floating Showcase Pill 2: Live Interview Scheduled */}
+                {/* Satellite Module 2: Live Interview Scheduled */}
                 <div className="hero-floating-card hero-floating-card--badge-bottom animate-float-rev">
                   <div className="hero-badge-pill">
                     <div className="hero-badge-pill__icon bg-emerald-500 text-white">
                       <Calendar size={14} />
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-slate-900">Interview Scheduled</div>
-                      <div className="text-2xs text-emerald-600 font-medium">Technical Round • Tomorrow 11 AM</div>
+                      <div className="text-xs font-bold text-slate-900">Technical Interview</div>
+                      <div className="text-2xs text-emerald-600 font-medium">Tomorrow • 11:00 AM IST (Google Meet)</div>
                     </div>
                   </div>
                 </div>
@@ -346,7 +503,7 @@ export const HomePage = () => {
             </div>
           </div>
 
-          {/* Social Proof / Partner Strip */}
+          {/* Social Proof & Trust Strip */}
           <div className="home-hero__trust-strip hero-anim-7">
             <span className="home-hero__trust-title">Trusted By Leading Tech Employers & Universities:</span>
             <div className="home-hero__trust-logos">
@@ -361,7 +518,9 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* 2. STATS STRIP (ANIMATED METRICS) */}
+      {/* ==========================================================================
+          STATS METRICS STRIP (Live Platform Telemetry)
+          ========================================================================== */}
       <section className="home-stats scroll-reveal" aria-label="Platform Statistics">
         <div className="container">
           <div className="home-stats__grid">
@@ -393,125 +552,441 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* 3. FEATURED OPPORTUNITIES SECTION */}
-      <section className="home-section scroll-reveal" aria-label="Featured Opportunities">
+      {/* ==========================================================================
+          SECTION 2: "Find the opportunity that fits you." (Job Discovery Visualized)
+          ========================================================================== */}
+      <section className="home-section scroll-reveal" aria-label="Job Discovery Showcase">
         <div className="container">
           <div className="home-section__header">
-            <Badge variant="primary" hasDot>
-              Editor's Choice
-            </Badge>
-            <h2 className="home-section__title mt-2">Featured Opportunities</h2>
+            <Badge variant="primary" hasDot>Discovery Engine</Badge>
+            <h2 className="home-section__title mt-2">Find the opportunity that fits you.</h2>
             <p className="home-section__desc">
-              Curated positions with direct interview pipelines from fast-growing engineering teams.
+              Search without algorithmic noise. Transparent compensation bands, remote flexibility,
+              and direct recruiter pipelines.
             </p>
           </div>
 
-          <div className="home-featured-grid">
-            {featuredJobs.map((job, idx) => (
-              <JobCard key={job.id} job={job} index={idx} />
-            ))}
-          </div>
-
-          <div className="text-center mt-8">
-            <Link to="/jobs">
-              <Button size="lg" variant="primary" rightIcon={<ArrowRight size={16} />}>
-                Explore All Opportunities
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. ROLE / CATEGORY EXPLORATION */}
-      <section className="home-section home-section--alt scroll-reveal" aria-label="Explore by Category">
-        <div className="container">
-          <div className="home-section__header">
-            <Badge variant="neutral">Explore Disciplines</Badge>
-            <h2 className="home-section__title mt-2">Browse By Domain & Specialization</h2>
-            <p className="home-section__desc">
-              Find positions aligned with your tech stack, academic background, and career trajectory.
-            </p>
-          </div>
-
-          <div className="home-category-grid">
-            {CATEGORIES.map((cat) => {
-              const IconComponent = CATEGORY_ICONS[cat.iconName] || Briefcase;
-              return (
-                <Link
-                  key={cat.id}
-                  to={`/jobs?category=${encodeURIComponent(cat.shortName)}`}
-                  className="home-category-card"
-                >
-                  <div>
-                    <div className="home-category-card__icon-wrap">
-                      <IconComponent size={22} />
+          {/* Interactive Discovery Dock */}
+          <div className="discovery-showcase">
+            <div className="discovery-showcase__sidebar">
+              <div className="discovery-showcase__sidebar-title">Select Discipline</div>
+              <div className="discovery-showcase__pills">
+                {DISCOVERY_PRESETS.map((preset) => (
+                  <button
+                    key={preset.id}
+                    type="button"
+                    className={`discovery-pill ${activeDiscoveryId === preset.id ? 'discovery-pill--active' : ''}`}
+                    onClick={() => setActiveDiscoveryId(preset.id)}
+                  >
+                    <div className="discovery-pill__left">
+                      <span className="discovery-pill__role">{preset.role}</span>
+                      <span className="discovery-pill__meta">{preset.company} • {preset.salary}</span>
                     </div>
-                    <h3 className="home-category-card__name">{cat.name}</h3>
-                    <p className="home-category-card__desc mt-1">{cat.description}</p>
+                    <ChevronRight size={16} className="discovery-pill__arrow" />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="discovery-showcase__stage">
+              <div className="discovery-card">
+                <div className="discovery-card__header">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <Badge variant="primary">{activeDiscovery.category}</Badge>
+                      <Badge variant="success" size="sm" hasDot>Actively Interviewing</Badge>
+                    </div>
+                    <h3 className="discovery-card__role">{activeDiscovery.role}</h3>
+                    <p className="discovery-card__company">{activeDiscovery.company}</p>
                   </div>
-                  <div className="home-category-card__count">
-                    <span>{cat.count} Open Roles</span>
-                    <ArrowRight size={14} />
+                  <div className="discovery-card__match-pill">
+                    <span className="discovery-card__match-score">{activeDiscovery.matchScore}%</span>
+                    <span className="discovery-card__match-label">Match</span>
                   </div>
-                </Link>
-              );
-            })}
+                </div>
+
+                <div className="discovery-card__details-row">
+                  <span className="discovery-card__chip">
+                    <Building2 size={13} /> {activeDiscovery.location}
+                  </span>
+                  <span className="discovery-card__chip discovery-card__chip--highlight">
+                    <TrendingUp size={13} /> {activeDiscovery.salary}
+                  </span>
+                  <span className="discovery-card__chip">
+                    <Clock size={13} /> {activeDiscovery.type}
+                  </span>
+                </div>
+
+                <p className="discovery-card__snippet">{activeDiscovery.snippet}</p>
+
+                <div className="discovery-card__skills">
+                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-2">
+                    Verified Skill Requirements:
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {activeDiscovery.skills.map((s) => (
+                      <span key={s} className="discovery-card__skill-tag">
+                        <Check size={11} className="text-emerald-500" />
+                        <span>{s}</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="discovery-card__footer">
+                  <div className="text-xs text-slate-500 flex items-center gap-1.5">
+                    <ShieldCheck size={14} className="text-emerald-600" />
+                    <span>Direct recruiter application • No agency spam</span>
+                  </div>
+                  <Link to="/jobs">
+                    <Button variant="primary" size="md" rightIcon={<ArrowRight size={15} />}>
+                      Explore Matching Roles
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Featured Live Jobs Grid */}
+          <div className="mt-12">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-lg font-bold text-slate-900">Featured Openings from Active Recruiters</h3>
+                <p className="text-xs text-slate-500">Live positions updated within the last 24 hours</p>
+              </div>
+              <Link to="/jobs">
+                <Button variant="ghost" size="sm" rightIcon={<ArrowRight size={14} />}>
+                  View All Openings
+                </Button>
+              </Link>
+            </div>
+
+            <div className="home-featured-grid">
+              {featuredJobs.map((job, idx) => (
+                <JobCard key={job.id} job={job} index={idx} />
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 5. HOW CAREERCONNECT WORKS */}
-      <section className="home-section scroll-reveal" aria-label="How CareerConnect Works">
+      {/* ==========================================================================
+          SECTION 3: "Build your professional profile." (Candidate Resume & Profile Intelligence)
+          ========================================================================== */}
+      <section className="home-section home-section--alt scroll-reveal" aria-label="Resume & Profile Experience">
         <div className="container">
           <div className="home-section__header">
-            <Badge variant="primary">Streamlined Process</Badge>
-            <h2 className="home-section__title mt-2">How CareerConnect Accelerates Your Career</h2>
+            <Badge variant="neutral">Profile Architecture</Badge>
+            <h2 className="home-section__title mt-2">Build your professional profile.</h2>
             <p className="home-section__desc">
-              Transparent, student-friendly, and enterprise-grade hiring workflows from application to offer.
+              Effortless resume intelligence with candidate-first privacy. Extract your education,
+              verified skills, and experience with zero data leakage.
             </p>
           </div>
 
-          <div className="home-steps-grid">
-            <div className="home-step-card">
-              <div className="home-step-card__number">1</div>
-              <h3 className="home-step-card__title">Create & Verify Profile</h3>
-              <p className="home-step-card__desc">
-                Build your standardized engineering profile with verified academic milestones, skills, and projects.
-              </p>
+          <div className="profile-storytelling-grid">
+            {/* Left: Interactive Simulated Resume Parsing Window */}
+            <div className="resume-story-card">
+              <div className="resume-story-card__top">
+                <div className="flex items-center gap-2">
+                  <span className="window-dot window-dot--red" />
+                  <span className="window-dot window-dot--yellow" />
+                  <span className="window-dot window-dot--green" />
+                  <span className="text-xs font-mono text-slate-400 ml-2">resume-extraction-engine.pdf</span>
+                </div>
+                <Badge variant="success" size="sm" hasDot>Parsed in 0.8s</Badge>
+              </div>
+
+              <div className="resume-story-card__body">
+                <div className="resume-story-card__banner">
+                  <ShieldCheck size={18} className="text-emerald-500 flex-shrink-0" />
+                  <div className="text-xs text-slate-300">
+                    <span className="font-semibold text-white">Client-Controlled Extraction:</span> You inspect and selectively approve all extracted data before it updates your public profile.
+                  </div>
+                </div>
+
+                <div className="resume-story-card__extracted-group">
+                  <div className="resume-story-card__item">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs font-bold text-slate-200">Candidate Identity</span>
+                      <span className="text-2xs text-emerald-400 font-mono">100% Confirmed</span>
+                    </div>
+                    <div className="text-sm font-semibold text-white">Alex Johnson</div>
+                    <div className="text-xs text-slate-400">B.Tech Computer Science • CGPA 8.9</div>
+                  </div>
+
+                  <div className="resume-story-card__item">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs font-bold text-slate-200">Extracted Skills</span>
+                      <span className="text-2xs text-emerald-400 font-mono">5 Verified</span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5 mt-1">
+                      {['Spring Boot', 'React', 'PostgreSQL', 'Docker', 'AWS'].map((skill) => (
+                        <span key={skill} className="resume-tag">
+                          <CheckCheck size={11} className="text-emerald-400" />
+                          <span>{skill}</span>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="resume-story-card__item">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs font-bold text-slate-200">Recent Experience</span>
+                      <span className="text-2xs text-emerald-400 font-mono">Verified Record</span>
+                    </div>
+                    <div className="text-sm font-medium text-slate-100">Full Stack Engineering Intern</div>
+                    <div className="text-xs text-slate-400">Built scalable REST APIs and responsive dashboards</div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="home-step-card">
-              <div className="home-step-card__number">2</div>
-              <h3 className="home-step-card__title">Discover Curated Matches</h3>
-              <p className="home-step-card__desc">
-                Filter by tech stack, compensation, work arrangement (Remote/Hybrid), and experience level with zero noise.
-              </p>
-            </div>
+            {/* Right: Candidate Value Proposition & Features */}
+            <div className="profile-storytelling__content">
+              <div className="feature-block">
+                <div className="feature-block__icon">
+                  <FileText size={20} />
+                </div>
+                <div>
+                  <h3 className="feature-block__title">Standardized ATS Profile</h3>
+                  <p className="feature-block__desc">
+                    No more manual form re-entry on every application. Upload your resume once and generate a verified, recruiter-ready profile in seconds.
+                  </p>
+                </div>
+              </div>
 
-            <div className="home-step-card">
-              <div className="home-step-card__number">3</div>
-              <h3 className="home-step-card__title">1-Click Fast Apply</h3>
-              <p className="home-step-card__desc">
-                Submit applications directly into recruiter pipelines without tedious third-party portal redirects.
-              </p>
-            </div>
+              <div className="feature-block">
+                <div className="feature-block__icon">
+                  <Lock size={20} />
+                </div>
+                <div>
+                  <h3 className="feature-block__title">Zero Data Leakage</h3>
+                  <p className="feature-block__desc">
+                    Your resume data is strictly confidential. No unauthorized AI training on personal details without explicit affirmative consent.
+                  </p>
+                </div>
+              </div>
 
-            <div className="home-step-card">
-              <div className="home-step-card__number">4</div>
-              <h3 className="home-step-card__title">Direct Interviews & Offers</h3>
-              <p className="home-step-card__desc">
-                Receive scheduled technical interviews, status tracking updates, and transparent offer evaluations.
-              </p>
+              <div className="feature-block">
+                <div className="feature-block__icon">
+                  <Star size={20} />
+                </div>
+                <div>
+                  <h3 className="feature-block__title">Automatic Skill Match Scoring</h3>
+                  <p className="feature-block__desc">
+                    Instantly see how well your coursework and stack match open engineering roles before submitting.
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Link to="/candidate/resume">
+                  <Button variant="primary" size="lg" rightIcon={<ArrowRight size={16} />}>
+                    Try Resume Import
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 6. DUAL CTA SECTION */}
-      <section className="home-section home-section--alt scroll-reveal" aria-label="Get Started Gateways">
+      {/* ==========================================================================
+          SECTION 4: "Recruit better talent." (Recruiter ATS Workflow Visualized)
+          ========================================================================== */}
+      <section className="home-section scroll-reveal" aria-label="Recruiter Workflow">
         <div className="container">
+          <div className="home-section__header">
+            <Badge variant="primary">Recruitment Hub</Badge>
+            <h2 className="home-section__title mt-2">Recruit better talent.</h2>
+            <p className="home-section__desc">
+              From candidate screening to offer rollout. Manage high-volume applicant pipelines
+              with institutional clarity.
+            </p>
+          </div>
+
+          {/* Interactive ATS Kanban Pipeline Visual */}
+          <div className="ats-showcase-board">
+            <div className="ats-showcase-board__header">
+              <div className="flex items-center gap-3">
+                <div className="ats-showcase-board__icon">
+                  <Briefcase size={18} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900">Senior Full Stack Engineer (Req #402)</h3>
+                  <span className="text-xs text-slate-500">Active Pipeline • 44 Total Applicants</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Link to="/recruiter/dashboard">
+                  <Button variant="outline" size="sm" rightIcon={<ArrowRight size={14} />}>
+                    Enter Recruiter Hub
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            <div className="ats-showcase-board__grid">
+              {PIPELINE_DEMO_COLUMNS.map((col) => (
+                <div key={col.id} className="ats-column">
+                  <div className="ats-column__header">
+                    <span className="ats-column__title">{col.title}</span>
+                    <span className="ats-column__count">{col.count}</span>
+                  </div>
+
+                  <div className="ats-column__cards">
+                    {col.candidates.map((cand, idx) => (
+                      <div key={idx} className="ats-card">
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="font-bold text-xs text-slate-900">{cand.name}</span>
+                          <span className="text-2xs font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
+                            {cand.match}% Match
+                          </span>
+                        </div>
+                        <div className="text-xs text-slate-600 mb-1">{cand.role}</div>
+                        <div className="text-2xs text-slate-400 mb-2">{cand.school}</div>
+                        <div className="flex items-center justify-between pt-1.5 border-t border-slate-100 text-2xs text-slate-500">
+                          <span>{cand.tag}</span>
+                          <ChevronRight size={12} className="text-slate-400" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ==========================================================================
+          SECTION 5: "From application to interview." (Application Lifecycle Visualized)
+          ========================================================================== */}
+      <section className="home-section home-section--alt scroll-reveal" aria-label="Application Lifecycle">
+        <div className="container">
+          <div className="home-section__header">
+            <Badge variant="neutral">Transparent Lifecycle</Badge>
+            <h2 className="home-section__title mt-2">From application to interview.</h2>
+            <p className="home-section__desc">
+              Every step illuminated. No ghosting, no ambiguous portal statuses, just direct communication.
+            </p>
+          </div>
+
+          {/* Interactive Progressive Lifecycle Stepper */}
+          <div className="lifecycle-stepper">
+            <div className="lifecycle-stepper__tabs">
+              {LIFECYCLE_STEPS.map((step, idx) => (
+                <button
+                  key={step.number}
+                  type="button"
+                  className={`lifecycle-tab ${activeStepIndex === idx ? 'lifecycle-tab--active' : ''}`}
+                  onClick={() => setActiveStepIndex(idx)}
+                >
+                  <span className="lifecycle-tab__number">{step.number}</span>
+                  <div className="lifecycle-tab__content">
+                    <span className="lifecycle-tab__title">{step.title}</span>
+                    <span className="lifecycle-tab__subtitle">{step.subtitle}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <div className="lifecycle-stepper__stage">
+              <div className="lifecycle-card">
+                <div className="lifecycle-card__badge">
+                  <span className="text-xs font-mono font-bold text-indigo-600">
+                    STAGE {LIFECYCLE_STEPS[activeStepIndex].number} / 04
+                  </span>
+                </div>
+                <h3 className="lifecycle-card__title">
+                  {LIFECYCLE_STEPS[activeStepIndex].title}
+                </h3>
+                <p className="lifecycle-card__desc">
+                  {LIFECYCLE_STEPS[activeStepIndex].detail}
+                </p>
+
+                {/* Simulated Live Viewport Card based on current stage */}
+                <div className="lifecycle-card__preview">
+                  {activeStepIndex === 0 && (
+                    <div className="preview-apply">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-bold text-slate-800">1-Click Application Submission</span>
+                        <Badge variant="primary" size="sm">Ready to Send</Badge>
+                      </div>
+                      <p className="text-xs text-slate-500 mb-3">Attaching standardized candidate profile and cover letter note.</p>
+                      <div className="bg-slate-50 p-2.5 rounded border border-slate-200 text-xs text-slate-700 italic">
+                        "Excited to apply for this engineering role through CareerConnect."
+                      </div>
+                    </div>
+                  )}
+
+                  {activeStepIndex === 1 && (
+                    <div className="preview-review">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-bold text-slate-800">Recruiter Pipeline Tracker</span>
+                        <Badge variant="warning" size="sm" hasDot>Under Review</Badge>
+                      </div>
+                      <p className="text-xs text-slate-500 mb-2">Lead Engineering Recruiter is reviewing your academic milestones and GitHub repository.</p>
+                      <div className="text-2xs text-emerald-600 font-semibold flex items-center gap-1">
+                        <CheckCircle2 size={13} /> SLA active • Estimated review within 24 hours
+                      </div>
+                    </div>
+                  )}
+
+                  {activeStepIndex === 2 && (
+                    <div className="preview-interview">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-bold text-slate-800">Interview Session Ready</span>
+                        <Badge variant="success" size="sm" hasDot>Confirmed</Badge>
+                      </div>
+                      <div className="bg-blue-50 border border-blue-200 rounded p-3 mb-2 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Video size={16} className="text-blue-600" />
+                          <span className="text-xs font-semibold text-blue-900">Technical Round 1 • Google Meet</span>
+                        </div>
+                        <span className="text-2xs font-mono bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-bold">11:00 AM</span>
+                      </div>
+                      <p className="text-2xs text-slate-500">Agenda: Data structures, system fundamentals, and architectural tradeoffs.</p>
+                    </div>
+                  )}
+
+                  {activeStepIndex === 3 && (
+                    <div className="preview-offer">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-bold text-slate-800">Verified Placement Offer</span>
+                        <Badge variant="success" size="sm">Selected</Badge>
+                      </div>
+                      <p className="text-xs text-slate-600 mb-2">Official offer letter extended by TechCorp Solutions. Compensation: ₹28 LPA (Fixed) + Performance Variables.</p>
+                      <div className="flex items-center gap-2 text-2xs text-emerald-700 font-medium">
+                        <CheckCircle2 size={13} /> Institutional placement records synced
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ==========================================================================
+          SECTION 6: "One platform. Every career journey." (Final SaaS Gateway)
+          ========================================================================== */}
+      <section className="home-section scroll-reveal" aria-label="Get Started Gateways">
+        <div className="container">
+          <div className="home-section__header">
+            <Badge variant="primary">Get Started</Badge>
+            <h2 className="home-section__title mt-2">One platform. Every career journey.</h2>
+            <p className="home-section__desc">
+              Whether you are graduating into engineering or scaling an enterprise product team,
+              CareerConnect delivers the tools you need.
+            </p>
+          </div>
+
           <div className="home-cta-grid">
-            {/* Candidate CTA */}
+            {/* Candidate Gateway */}
             <div className="home-cta-card home-cta-card--candidate">
               <div>
                 <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-blue-300 mb-2">
@@ -523,7 +998,7 @@ export const HomePage = () => {
                   Zero spam, direct recruiter review.
                 </p>
               </div>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-3 mt-4">
                 <Link to="/jobs">
                   <Button variant="primary" size="lg" rightIcon={<ArrowRight size={16} />}>
                     Browse Open Positions
@@ -537,7 +1012,7 @@ export const HomePage = () => {
               </div>
             </div>
 
-            {/* Recruiter CTA */}
+            {/* Recruiter Gateway */}
             <div className="home-cta-card home-cta-card--recruiter">
               <div>
                 <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-400 mb-2">
@@ -548,7 +1023,7 @@ export const HomePage = () => {
                   Publish openings, review pre-qualified candidates, manage interview rounds, and build high-performance product teams faster.
                 </p>
               </div>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-3 mt-4">
                 <Link to="/recruiter/dashboard">
                   <Button variant="primary" size="lg" rightIcon={<ArrowRight size={16} />}>
                     Enter Recruiter Hub

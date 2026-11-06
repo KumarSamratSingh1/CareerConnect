@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { margin: 0; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #0f172a; display: flex; justify-content: center; }
+  .canvas { width: 1050px; padding: 25px; border: 2px solid #cbd5e1; border-radius: 12px; background: #ffffff; }
+  .title { text-align: center; font-size: 22px; font-weight: 700; color: #1e293b; margin-bottom: 25px; }
+  .usecase-layout { display: flex; justify-content: space-between; align-items: stretch; gap: 20px; }
+  .actors-col { width: 160px; display: flex; flex-direction: column; justify-content: space-around; }
+  .actor-box { background: #f1f5f9; border: 1.5px solid #94a3b8; border-radius: 8px; padding: 12px; text-align: center; }
+  .actor-icon { font-size: 28px; }
+  .actor-name { font-size: 13px; font-weight: 700; color: #1e293b; margin-top: 5px; }
+  .boundary { flex: 1; border: 2px dashed #0284c7; border-radius: 12px; padding: 20px; background: #f0f9ff; position: relative; }
+  .boundary-label { position: absolute; top: -12px; left: 20px; background: #0284c7; color: white; padding: 2px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+  .uc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .uc-oval { background: #ffffff; border: 1.5px solid #0284c7; border-radius: 20px; padding: 8px 14px; font-size: 11.5px; font-weight: 600; color: #0369a1; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  .uc-cand { border-color: #0284c7; color: #0369a1; }
+  .uc-rec { border-color: #059669; color: #047857; }
+  .uc-adm { border-color: #d97706; color: #b45309; }
+  .uc-sys { border-color: #7c3aed; color: #6d28d9; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="title">CareerConnect System Use Case Diagram</div>
+  
+  <div class="usecase-layout">
+    <div class="actors-col">
+      <div class="actor-box">
+        <div class="actor-icon">👨‍🎓</div>
+        <div class="actor-name">Candidate</div>
+      </div>
+      <div class="actor-box">
+        <div class="actor-icon">🏢</div>
+        <div class="actor-name">Recruiter</div>
+      </div>
+      <div class="actor-box">
+        <div class="actor-icon">🛡️</div>
+        <div class="actor-name">Administrator</div>
+      </div>
+      <div class="actor-box">
+        <div class="actor-icon">⏰</div>
+        <div class="actor-name">Job Expiry Scheduler</div>
+      </div>
+    </div>
+    
+    <div class="boundary">
+      <div class="boundary-label">CareerConnect Application System Boundary</div>
+      <div class="uc-grid">
+        <div class="uc-oval uc-cand">UC-1: Register & Authenticate (JWT)</div>
+        <div class="uc-oval uc-cand">UC-2: Manage Portfolio & Strength Meter</div>
+        <div class="uc-oval uc-cand">UC-3: Upload Resume & Trigger Parsing (RI-3)</div>
+        <div class="uc-oval uc-cand">UC-4: Review Draft & Import into Profile</div>
+        <div class="uc-oval uc-cand">UC-5: Search & Filter Active Job Postings</div>
+        <div class="uc-oval uc-cand">UC-6: Submit Job Application & Cover Letter</div>
+        <div class="uc-oval uc-cand">UC-7: Bookmark / Save Jobs for Later</div>
+        <div class="uc-oval uc-cand">UC-8: View Scheduled Interviews & Join Link</div>
+        
+        <div class="uc-oval uc-rec">UC-9: Setup & Verify Corporate Profile</div>
+        <div class="uc-oval uc-rec">UC-10: Post, Update & Close Job Listings</div>
+        <div class="uc-oval uc-rec">UC-11: Review Applications & Candidate Profiles</div>
+        <div class="uc-oval uc-rec">UC-12: Transition Application Lifecycle State</div>
+        <div class="uc-oval uc-rec">UC-13: Schedule Interview & Generate Link</div>
+        <div class="uc-oval uc-rec">UC-14: Track Pipeline Metrics & Funnel</div>
+        
+        <div class="uc-oval uc-adm">UC-15: Monitor Platform Telemetry & KPI Stats</div>
+        <div class="uc-oval uc-adm">UC-16: Audit Directory & Toggle User Accounts</div>
+        <div class="uc-oval uc-adm">UC-17: Verify Company Credentials (KYC)</div>
+        <div class="uc-oval uc-adm">UC-18: Moderate & Policy-Enforce Job Postings</div>
+        
+        <div class="uc-oval uc-sys">UC-19: Cron Job: Auto-expire Overdue Postings</div>
+        <div class="uc-oval uc-sys">UC-20: Security: Stateless Bearer Token Guard</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { margin: 0; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #f8fafc; display: flex; justify-content: center; }
+  .canvas { width: 1100px; padding: 30px; background: #1e293b; border-radius: 16px; border: 1px solid #334155; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+  .header { text-align: center; margin-bottom: 25px; }
+  .title { font-size: 24px; font-weight: 700; color: #38bdf8; letter-spacing: 0.5px; }
+  .subtitle { font-size: 14px; color: #94a3b8; margin-top: 5px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 25px; }
+  .role-card { background: #0f172a; border-radius: 12px; padding: 18px; border-top: 4px solid #38bdf8; }
+  .role-card.cand { border-top-color: #38bdf8; }
+  .role-card.rec { border-top-color: #34d399; }
+  .role-card.adm { border-top-color: #fbbf24; }
+  .role-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .role-card.cand .role-title { color: #38bdf8; }
+  .role-card.rec .role-title { color: #34d399; }
+  .role-card.adm .role-title { color: #fbbf24; }
+  .feature-list { list-style: none; padding: 0; margin: 0; font-size: 12.5px; color: #cbd5e1; line-height: 1.6; }
+  .feature-list li::before { content: "✓ "; color: #38bdf8; font-weight: bold; }
+  .role-card.rec .feature-list li::before { color: #34d399; }
+  .role-card.adm .feature-list li::before { color: #fbbf24; }
+  
+  .middle-band { background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(129, 140, 248, 0.1)); border: 1px solid #6366f1; border-radius: 12px; padding: 18px; margin-bottom: 25px; text-align: center; }
+  .engine-title { font-size: 16px; font-weight: 700; color: #818cf8; margin-bottom: 8px; }
+  .engine-desc { font-size: 12.5px; color: #cbd5e1; max-width: 900px; margin: 0 auto; line-height: 1.5; }
+  .flow-pills { display: flex; justify-content: center; gap: 12px; margin-top: 14px; flex-wrap: wrap; }
+  .pill { background: #1e1b4b; border: 1px solid #818cf8; color: #c7d2fe; padding: 6px 14px; border-radius: 20px; font-size: 11.5px; font-weight: 600; }
+  
+  .bottom-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+  .tech-card { background: #0f172a; border-radius: 12px; padding: 18px; border: 1px solid #334155; }
+  .tech-title { font-size: 15px; font-weight: 700; color: #f1f5f9; margin-bottom: 10px; }
+  .tech-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tech-tag { background: #1e293b; color: #94a3b8; border: 1px solid #475569; padding: 4px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 500; }
+  .highlight { color: #38bdf8; border-color: #38bdf8; background: rgba(56, 189, 248, 0.1); }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="header">
+    <div class="title">CareerConnect: Smart Recruitment & Career Intelligence Platform</div>
+    <div class="subtitle">Full-Stack Enterprise Architecture with Role-Based Access Control and Resume Intelligence (RI-3)</div>
+  </div>
+  
+  <div class="grid">
+    <div class="role-card cand">
+      <div class="role-title">👤 Candidate Ecosystem</div>
+      <ul class="feature-list">
+        <li>Rich Profile Management & Strength Meter</li>
+        <li>Resume Upload & Intelligent Extraction</li>
+        <li>Granular Review & Approved Import</li>
+        <li>Smart Job Discovery & Multi-Filter Search</li>
+        <li>Single-Click Job Applications & Withdrawal</li>
+        <li>Interview Schedule & Calendar Tracking</li>
+      </ul>
+    </div>
+    
+    <div class="role-card rec">
+      <div class="role-title">🏢 Recruiter Management Hub</div>
+      <ul class="feature-list">
+        <li>Verified Corporate Profile Management</li>
+        <li>Targeted Job & Internship Publishing</li>
+        <li>Applicant Review & Qualification Scoring</li>
+        <li>Application Lifecycle Transitions</li>
+        <li>Built-in Interview Scheduling & Links</li>
+        <li>Real-Time Candidate Pipeline Analytics</li>
+      </ul>
+    </div>
+    
+    <div class="role-card adm">
+      <div class="role-title">🛡️ Admin Governance Console</div>
+      <ul class="feature-list">
+        <li>System Telemetry & Platform Counters</li>
+        <li>User Directory Audit & Suspension Controls</li>
+        <li>Corporate Verification Audit (KYC)</li>
+        <li>Marketplace Job Listing Moderation</li>
+        <li>Cross-Platform Interview Inspection</li>
+        <li>Compliance & Account Activity Logging</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="middle-band">
+    <div class="engine-title">⚡ Intelligent Resume Parsing & Ingestion Engine (RI-3)</div>
+    <div class="engine-desc">
+      Processes multi-format resume documents (PDF, DOCX) through Apache PDFBox/POI text extractors, applies deterministic pattern matching with 5-field temporal composite deduplication, enforces explicit overwrite approval, and performs isolated transactional persistence.
+    </div>
+    <div class="flow-pills">
+      <div class="pill">📄 PDF / DOCX Upload</div>
+      <div class="pill">⚙️ Text Extraction</div>
+      <div class="pill">🔍 Section Parsing</div>
+      <div class="pill">✏️ Candidate Review Draft</div>
+      <div class="pill">🛡️ Overwrite Authorization</div>
+      <div class="pill">💾 Atomic JPA Persistence</div>
+    </div>
+  </div>
+  
+  <div class="bottom-grid">
+    <div class="tech-card">
+      <div class="tech-title">💻 Technical Stack & Modern Tooling</div>
+      <div class="tech-tags">
+        <span class="tech-tag highlight">Java 21</span>
+        <span class="tech-tag highlight">Spring Boot 4.1.1</span>
+        <span class="tech-tag highlight">Spring Security 6</span>
+        <span class="tech-tag highlight">JWT (JJWT 0.12.6)</span>
+        <span class="tech-tag highlight">Spring Data JPA</span>
+        <span class="tech-tag highlight">MySQL 8.0</span>
+        <span class="tech-tag highlight">React 19</span>
+        <span class="tech-tag highlight">Vite 8</span>
+        <span class="tech-tag highlight">React Router 7</span>
+        <span class="tech-tag highlight">Axios</span>
+        <span class="tech-tag highlight">Apache PDFBox 3.0</span>
+        <span class="tech-tag highlight">Apache POI 5.4</span>
+        <span class="tech-tag highlight">JUnit 5 / Mockito</span>
+      </div>
+    </div>
+    
+    <div class="tech-card">
+      <div class="tech-title">📊 Verification Metrics</div>
+      <div style="font-size: 13px; color: #cbd5e1; line-height: 1.8;">
+        <div>• <strong>Automated Tests:</strong> 146 / 146 Passed (100%)</div>
+        <div>• <strong>Frontend Linting:</strong> 0 Errors / 0 Warnings</div>
+        <div>• <strong>Database Entities:</strong> 13 Relational Tables</div>
+        <div>• <strong>Security:</strong> Stateless JWT RBAC</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

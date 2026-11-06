@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { margin: 0; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #0f172a; display: flex; justify-content: center; }
+  .canvas { width: 1050px; padding: 25px; border: 2px solid #cbd5e1; border-radius: 12px; background: #ffffff; }
+  .title { text-align: center; font-size: 21px; font-weight: 700; color: #1e293b; margin-bottom: 25px; }
+  .flow-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .flow-step { flex: 1; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 12px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
+  .step-num { font-size: 11px; font-weight: 700; color: #2563eb; text-transform: uppercase; margin-bottom: 4px; }
+  .step-title { font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+  .step-desc { font-size: 11px; color: #64748b; line-height: 1.4; }
+  .arrow { font-size: 20px; font-weight: bold; color: #94a3b8; padding: 0 10px; }
+  .highlight-step { border-color: #2563eb; background: #eff6ff; }
+  .security-step { border-color: #059669; background: #ecfdf5; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="title">Resume Intelligence (RI-3) Ingestion, Deduplication & Atomic Persistence Architecture</div>
+  
+  <div class="flow-row">
+    <div class="flow-step">
+      <div class="step-num">Step 1: Document Upload</div>
+      <div class="step-title">Resume Submission</div>
+      <div class="step-desc">Candidate uploads PDF or DOCX file (up to 10MB) via React Dropzone</div>
+    </div>
+    <div class="arrow">➔</div>
+    <div class="flow-step">
+      <div class="step-num">Step 2: Stream Extraction</div>
+      <div class="step-title">Text Stream Extraction</div>
+      <div class="step-desc">Apache PDFBox 3.0 / POI 5.4 parses text without cloud storage leakage</div>
+    </div>
+    <div class="arrow">➔</div>
+    <div class="flow-step">
+      <div class="step-num">Step 3: Section Parser</div>
+      <div class="step-title">Deterministic Parsing</div>
+      <div class="step-desc">Regex & Section Header matching isolates personal, skills, edu, exp, certs</div>
+    </div>
+  </div>
+
+  <div class="flow-row">
+    <div class="flow-step highlight-step">
+      <div class="step-num">Step 4: Candidate Draft Review</div>
+      <div class="step-title">Granular Selection & Editing</div>
+      <div class="step-desc">User edits fields, selects/unchecks individual items, reviews privacy badge</div>
+    </div>
+    <div class="arrow">➔</div>
+    <div class="flow-step security-step">
+      <div class="step-num">Step 5: Overwrite Consent</div>
+      <div class="step-title">Explicit Authorization</div>
+      <div class="step-desc">Personal details require explicit checkbox approval before updating profile</div>
+    </div>
+    <div class="arrow">➔</div>
+    <div class="flow-step">
+      <div class="step-num">Step 6: REST Submission</div>
+      <div class="step-title">POST /resume/import</div>
+      <div class="step-desc">Transmits structured JSON DTO carrying modified values & selected flags</div>
+    </div>
+  </div>
+
+  <div class="flow-row">
+    <div class="flow-step security-step">
+      <div class="step-num">Step 7: Pre-Validation</div>
+      <div class="step-title">Identity & Profile Check</div>
+      <div class="step-desc">Validates JWT principal against CandidateProfile; ensures atomic integrity</div>
+    </div>
+    <div class="arrow">➔</div>
+    <div class="flow-step highlight-step">
+      <div class="step-num">Step 8: 5-Field Deduplication</div>
+      <div class="step-title">Temporal Key Matching</div>
+      <div class="step-desc">Checks institution+degree+field+dates; protects repeated legitimate records</div>
+    </div>
+    <div class="arrow">➔</div>
+    <div class="flow-step security-step">
+      <div class="step-num">Step 9: Atomic JPA Persistence</div>
+      <div class="step-title">Transactional Ingestion</div>
+      <div class="step-desc">@Transactional commits new entities, updates Profile Strength Meter (85-100%)</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

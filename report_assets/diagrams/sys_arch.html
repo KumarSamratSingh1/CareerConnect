@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { margin: 0; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #0f172a; display: flex; justify-content: center; }
+  .canvas { width: 1050px; padding: 25px; border: 2px solid #e2e8f0; border-radius: 12px; background: #fafafa; }
+  .title { text-align: center; font-size: 22px; font-weight: 700; color: #1e293b; margin-bottom: 25px; }
+  .layer { background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 15px; margin-bottom: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+  .layer-header { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+  .layer-1 .layer-header { color: #2563eb; }
+  .layer-2 .layer-header { color: #059669; }
+  .layer-3 .layer-header { color: #7c3aed; }
+  .layer-4 .layer-header { color: #d97706; }
+  .layer-5 .layer-header { color: #dc2626; }
+  .components { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+  .box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; text-align: center; }
+  .box-name { font-size: 13px; font-weight: 600; color: #0f172a; }
+  .box-desc { font-size: 11px; color: #64748b; margin-top: 3px; }
+  .connector { text-align: center; font-size: 18px; color: #94a3b8; margin: -8px 0 8px; font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="title">CareerConnect 3-Tier Layered Architecture</div>
+  
+  <div class="layer layer-1">
+    <div class="layer-header">
+      <span>1. Presentation Layer (Client Side)</span>
+      <span style="font-size: 11px; background: #dbeafe; padding: 3px 8px; border-radius: 4px;">React 19 + Vite 8 SPA</span>
+    </div>
+    <div class="components">
+      <div class="box"><div class="box-name">Candidate Portal</div><div class="box-desc">Dashboard, Profile, Resume Import, Saved Jobs</div></div>
+      <div class="box"><div class="box-name">Recruiter Hub</div><div class="box-desc">Company, Job Postings, Application Review</div></div>
+      <div class="box"><div class="box-name">Admin Console</div><div class="box-desc">User Management, Verification, Telemetry</div></div>
+      <div class="box"><div class="box-name">Public Marketplace</div><div class="box-desc">Home, Search, Details, Auth Pages</div></div>
+      <div class="box"><div class="box-name">Route Guards & Context</div><div class="box-desc">ProtectedRoute, AuthContext, ThemeContext</div></div>
+    </div>
+  </div>
+  
+  <div class="connector">▼ HTTP / REST APIs (JSON & Multipart via Axios with JWT Bearer Interceptor) ▼</div>
+  
+  <div class="layer layer-2">
+    <div class="layer-header">
+      <span>2. Security & Gateway Filter Layer</span>
+      <span style="font-size: 11px; background: #d1fae5; padding: 3px 8px; border-radius: 4px;">Spring Security 6</span>
+    </div>
+    <div class="components">
+      <div class="box"><div class="box-name">JwtAuthFilter</div><div class="box-desc">Header Token Extraction & Validation</div></div>
+      <div class="box"><div class="box-name">SecurityContextHolder</div><div class="box-desc">Stateless Principal & Role Context</div></div>
+      <div class="box"><div class="box-name">CORS Configuration</div><div class="box-desc">Allowed Origins & Pre-flight Handlers</div></div>
+      <div class="box"><div class="box-name">Role-Based URL Matchers</div><div class="box-desc">hasRole('CANDIDATE' / 'RECRUITER' / 'ADMIN')</div></div>
+    </div>
+  </div>
+  
+  <div class="connector">▼ Authorized Requests ▼</div>
+  
+  <div class="layer layer-3">
+    <div class="layer-header">
+      <span>3. Application Controller & DTO Layer</span>
+      <span style="font-size: 11px; background: #ede9fe; padding: 3px 8px; border-radius: 4px;">Spring Web MVC</span>
+    </div>
+    <div class="components">
+      <div class="box"><div class="box-name">AuthController</div><div class="box-desc">Register, Login, Google OAuth</div></div>
+      <div class="box"><div class="box-name">CandidateControllers</div><div class="box-desc">Profile, Education, Experience, Skills</div></div>
+      <div class="box"><div class="box-name">ResumeController</div><div class="box-desc">/resume/parse & /resume/import</div></div>
+      <div class="box"><div class="box-name">RecruiterControllers</div><div class="box-desc">Jobs, Applications, Company, Interview</div></div>
+      <div class="box"><div class="box-name">AdminControllers</div><div class="box-desc">Dashboard, Users, Companies, Moderation</div></div>
+    </div>
+  </div>
+  
+  <div class="connector">▼ Service Invocation & Bean Validation ▼</div>
+  
+  <div class="layer layer-4">
+    <div class="layer-header">
+      <span>4. Business Logic & Processing Layer</span>
+      <span style="font-size: 11px; background: #fef3c7; padding: 3px 8px; border-radius: 4px;">Spring Service Layer</span>
+    </div>
+    <div class="components">
+      <div class="box"><div class="box-name">ResumeImportService</div><div class="box-desc">Pre-Validation & 5-Field Deduplication</div></div>
+      <div class="box"><div class="box-name">DocumentParserService</div><div class="box-desc">PDFBox & POI Text Extraction</div></div>
+      <div class="box"><div class="box-name">ApplicationService</div><div class="box-desc">State Transitions & Status History</div></div>
+      <div class="box"><div class="box-name">InterviewService</div><div class="box-desc">Meeting Links & Schedule Coordination</div></div>
+      <div class="box"><div class="box-name">JobExpiryScheduler</div><div class="box-desc">Automated Deadline Cleanup Cron</div></div>
+    </div>
+  </div>
+  
+  <div class="connector">▼ Transactional Persistence (Spring Data JPA) ▼</div>
+  
+  <div class="layer layer-5">
+    <div class="layer-header">
+      <span>5. Data Persistence Layer</span>
+      <span style="font-size: 11px; background: #fee2e2; padding: 3px 8px; border-radius: 4px;">Hibernate ORM & MySQL 8.0</span>
+    </div>
+    <div class="components">
+      <div class="box"><div class="box-name">User & Profile Tables</div><div class="box-desc">users, candidate_profiles, recruiter_profiles</div></div>
+      <div class="box"><div class="box-name">Candidate Portfolio</div><div class="box-desc">educations, experiences, skills, projects, certs</div></div>
+      <div class="box"><div class="box-name">Recruitment Tables</div><div class="box-desc">companies, jobs, applications, status_history</div></div>
+      <div class="box"><div class="box-name">Interviews & Bookmarks</div><div class="box-desc">interviews, saved_jobs, candidate_skills</div></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

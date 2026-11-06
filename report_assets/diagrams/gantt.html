@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { margin: 0; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #0f172a; display: flex; justify-content: center; }
+  .canvas { width: 1050px; padding: 25px; border: 2px solid #e2e8f0; border-radius: 12px; background: #ffffff; }
+  .title { text-align: center; font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th, td { border: 1px solid #cbd5e1; padding: 8px 6px; text-align: center; }
+  th { background: #f1f5f9; color: #1e293b; font-weight: 600; }
+  td.task { text-align: left; font-weight: 600; color: #334155; width: 280px; }
+  .bar { height: 16px; border-radius: 4px; }
+  .bar-plan { background: #38bdf8; }
+  .bar-design { background: #818cf8; }
+  .bar-back { background: #34d399; }
+  .bar-front { background: #f59e0b; }
+  .bar-ri3 { background: #ec4899; }
+  .bar-test { background: #10b981; }
+  .bar-doc { background: #64748b; }
+  .legend { display: flex; justify-content: center; gap: 15px; margin-top: 20px; flex-wrap: wrap; font-size: 11.5px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-color { width: 14px; height: 14px; border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="title">CareerConnect Project Development Timeline (Gantt Chart)</div>
+  <table>
+    <thead>
+      <tr>
+        <th rowspan="2">Phase / Task Description</th>
+        <th colspan="4">Month 1</th>
+        <th colspan="4">Month 2</th>
+        <th colspan="4">Month 3</th>
+      </tr>
+      <tr>
+        <th>W1</th><th>W2</th><th>W3</th><th>W4</th>
+        <th>W5</th><th>W6</th><th>W7</th><th>W8</th>
+        <th>W9</th><th>W10</th><th>W11</th><th>W12</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="task">1. Client Need Analysis & Feasibility Study</td>
+        <td><div class="bar bar-plan"></div></td><td><div class="bar bar-plan"></div></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td class="task">2. Architecture & Relational Schema Design</td>
+        <td></td><td><div class="bar bar-design"></div></td><td><div class="bar bar-design"></div></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td class="task">3. Backend Auth, Security & REST APIs</td>
+        <td></td><td></td><td><div class="bar bar-back"></div></td><td><div class="bar bar-back"></div></td><td><div class="bar bar-back"></div></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td class="task">4. Frontend UI Components & Role Portals</td>
+        <td></td><td></td><td></td><td></td><td><div class="bar bar-front"></div></td><td><div class="bar bar-front"></div></td><td><div class="bar bar-front"></div></td><td></td><td></td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td class="task">5. Resume Intelligence (RI-3) Engine</td>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td><div class="bar bar-ri3"></div></td><td><div class="bar bar-ri3"></div></td><td><div class="bar bar-ri3"></div></td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td class="task">6. End-to-End Integration & Unit Testing</td>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td><div class="bar bar-test"></div></td><td><div class="bar bar-test"></div></td><td><div class="bar bar-test"></div></td><td></td>
+      </tr>
+      <tr>
+        <td class="task">7. Final Academic Report & Verification</td>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td><div class="bar bar-doc"></div></td><td><div class="bar bar-doc"></div></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <div class="legend">
+    <div class="legend-item"><div class="legend-color bar-plan"></div><span>Need Identification</span></div>
+    <div class="legend-item"><div class="legend-color bar-design"></div><span>Design & Schemas</span></div>
+    <div class="legend-item"><div class="legend-color bar-back"></div><span>Backend Engineering</span></div>
+    <div class="legend-item"><div class="legend-color bar-front"></div><span>Frontend Engineering</span></div>
+    <div class="legend-item"><div class="legend-color bar-ri3"></div><span>Resume Intelligence</span></div>
+    <div class="legend-item"><div class="legend-color bar-test"></div><span>Verification & Tests</span></div>
+    <div class="legend-item"><div class="legend-color bar-doc"></div><span>Documentation</span></div>
+  </div>
+</div>
+</body>
+</html>

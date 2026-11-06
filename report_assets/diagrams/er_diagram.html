@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { margin: 0; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #0f172a; display: flex; justify-content: center; }
+  .canvas { width: 1100px; padding: 25px; border: 2px solid #cbd5e1; border-radius: 12px; background: #f8fafc; }
+  .title { text-align: center; font-size: 22px; font-weight: 700; color: #1e293b; margin-bottom: 20px; }
+  .subtitle { text-align: center; font-size: 13px; color: #64748b; margin-top: -15px; margin-bottom: 25px; }
+  .tables-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+  .table-card { background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.04); font-size: 11px; }
+  .table-header { padding: 6px 10px; font-weight: 700; color: white; display: flex; justify-content: space-between; }
+  .th-user { background: #2563eb; }
+  .th-cand { background: #0284c7; }
+  .th-rec { background: #059669; }
+  .th-job { background: #d97706; }
+  .th-app { background: #7c3aed; }
+  .th-int { background: #dc2626; }
+  .field-list { padding: 8px 10px; line-height: 1.6; }
+  .pk { font-weight: 700; color: #b91c1c; }
+  .fk { font-weight: 600; color: #2563eb; }
+  .legend { display: flex; justify-content: center; gap: 20px; margin-top: 20px; font-size: 12px; font-weight: 600; }
+  .rel-line { margin-top: 15px; background: #e2e8f0; border-radius: 6px; padding: 10px 15px; font-size: 11.5px; color: #334155; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="title">CareerConnect Relational Database Entity-Relationship (ER) Schema</div>
+  <div class="subtitle">Complete MySQL 8.0 Relational Entity Mappings with Foreign Keys and Referential Integrity</div>
+  
+  <div class="tables-grid">
+    <!-- Users -->
+    <div class="table-card">
+      <div class="table-header th-user"><span>users</span><span>Core</span></div>
+      <div class="field-list">
+        <div><span class="pk">PK</span> id (BIGINT)</div>
+        <div>email (VARCHAR 100, UQ)</div>
+        <div>password (VARCHAR 255)</div>
+        <div>full_name (VARCHAR 100)</div>
+        <div>role (ENUM: CAND, REC, ADM)</div>
+        <div>enabled (BOOLEAN)</div>
+        <div>provider (VARCHAR 20)</div>
+        <div>created_at, updated_at</div>
+      </div>
+    </div>
+
+    <!-- Candidate Profiles -->
+    <div class="table-card">
+      <div class="table-header th-cand"><span>candidate_profiles</span><span>Candidate</span></div>
+      <div class="field-list">
+        <div><span class="pk">PK</span> id (BIGINT)</div>
+        <div><span class="fk">FK</span> user_id (BIGINT, UQ)</div>
+        <div>title (VARCHAR 150)</div>
+        <div>bio (TEXT)</div>
+        <div>phone (VARCHAR 20)</div>
+        <div>location (VARCHAR 100)</div>
+        <div>resume_url (VARCHAR 255)</div>
+        <div>github_url, linkedin_url</div>
+        <div>profile_completed (INT)</div>
+      </div>
+    </div>
+
+    <!-- Companies -->
+    <div class="table-card">
+      <div class="table-header th-rec"><span>companies</span><span>Recruiter</span></div>
+      <div class="field-list">
+        <div><span class="pk">PK</span> id (BIGINT)</div>
+        <div>name (VARCHAR 150)</div>
+        <div>description (TEXT)</div>
+        <div>website (VARCHAR 200)</div>
+        <div>location (VARCHAR 100)</div>
+        <div>logo_url (VARCHAR 255)</div>
+        <div>is_verified (BOOLEAN)</div>
+        <div>created_at (DATETIME)</div>
+      </div>
+    </div>
+
+    <!-- Recruiter Profiles -->
+    <div class="table-card">
+      <div class="table-header th-rec"><span>recruiter_profiles</span><span>Recruiter</span></div>
+      <div class="field-list">
+        <div><span class="pk">PK</span> id (BIGINT)</div>
+        <div><span class="fk">FK</span> user_id (BIGINT, UQ)</div>
+        <div><span class="fk">FK</span> company_id (BIGINT)</div>
+        <div>designation (VARCHAR 100)</div>
+        <div>department (VARCHAR 100)</div>
+      </div>
+    </div>
+
+    <!-- Educations -->
+    <div class="table-card">
+      <div class="table-header th-cand"><span>candidate_educations</span><span>Portfolio</span></div>
+      <div class="field-list">
+        <div><span class="pk">PK</span> id (BIGINT)</div>
+        <div><span class="fk">FK</span> candidate_id (BIGINT)</div>
+        <div>institution (VARCHAR 150)</div>
+        <div>degree (VARCHAR 100)</div>
+        <div>field_of_study (VARCHAR 100)</div>
+        <div>start_date, end_date (DATE)</div>
+        <div>grade, is_current</div>
+      </div>
+    </div>
+
+    <!-- Experiences -->
+    <div class="table-card">
+      <div class="table-header th-cand"><span>candidate_experiences</span><span>Portfolio</span></div>
+      <div class="field-list">
+        <div><span class="pk">PK</span> id (BIGINT)</div>
+        <div><span class="fk">FK</span> candidate_id (BIGINT)</div>
+        <div>company (VARCHAR 150)</div>
+        <div>job_title (VARCHAR 100)</div>
+        <div>location (VARCHAR 100)</div>
+        <div>start_date, end_date (DATE)</div>
+        <div>is_current, description</div>
+      </div>
+    </div>
+
+    <!-- Skills -->
+    <div class="table-card">
+      <div class="table-header th-cand"><span>candidate_skills</span><span>Portfolio</span></div>
+      <div class="field-list">
+        <div><span class="pk">PK</span> id (BIGINT)</div>
+        <div><span class="fk">FK</span> candidate_id (BIGINT)</div>
+        <div><span class="fk">FK</span> skill_id (BIGINT)</div>
+        <div>years_experience (INT)</div>
+        <div><em>skills table: id, name, category</em></div>
+      </div>
+    </div>
+
+    <!-- Projects & Certs -->
+    <div class="table-card">
+      <div class="table-header th-cand"><span>projects & certs</span><span>Portfolio</span></div>
+      <div class="field-list">
+        <div><span class="pk">PK</span> id (BIGINT)</div>
+        <div><span class="fk">FK</span> candidate_id (BIGINT)</div>
+        <div>title / cert_name</div>
+        <div>technologies / org</div>
+        <div>project_url / cred_id</div>
+        <div>start_date, end_date</div>
+      </div>
+    </div>
+
+    <!-- Jobs -->
+    <div class="table-card">
+      <div class="table-header th-job"><span>jobs</span><span>Marketplace</span></div>
+      <div class="field-list">
+        <div><span class="pk">PK</span> id (BIGINT)</div>
+        <div><span class="fk">FK</span> company_id (BIGINT)</div>
+        <div><span class="fk">FK</span> recruiter_id (BIGINT)</div>
+        <div>title (VARCHAR 150)</div>
+        <div>job_type (FULL_TIME, INTERN)</div>
+        <div>salary_min, salary_max</div>
+        <div>status (ACTIVE, CLOSED)</div>
+        <div>deadline (DATETIME)</div>
+      </div>
+    </div>
+
+    <!-- Job Applications -->
+    <div class="table-card">
+      <div class="table-header th-app"><span>job_applications</span><span>Applications</span></div>
+      <div class="field-list">
+        <div><span class="pk">PK</span> id (BIGINT)</div>
+        <div><span class="fk">FK</span> job_id (BIGINT)</div>
+        <div><span class="fk">FK</span> candidate_id (BIGINT)</div>
+        <div>status (ENUM: 6 states)</div>
+        <div>cover_letter (TEXT)</div>
+        <div>resume_url (VARCHAR 255)</div>
+        <div>applied_at, updated_at</div>
+      </div>
+    </div>
+
+    <!-- Interviews -->
+    <div class="table-card">
+      <div class="table-header th-int"><span>interviews</span><span>Coordination</span></div>
+      <div class="field-list">
+        <div><span class="pk">PK</span> id (BIGINT)</div>
+        <div><span class="fk">FK</span> application_id (BIGINT)</div>
+        <div>interview_date (DATE)</div>
+        <div>start_time, end_time (TIME)</div>
+        <div>interview_type (ONLINE/IN_PERSON)</div>
+        <div>location_or_link (VARCHAR 255)</div>
+        <div>status (SCHEDULED/COMPLETED)</div>
+      </div>
+    </div>
+
+    <!-- Saved Jobs & History -->
+    <div class="table-card">
+      <div class="table-header th-app"><span>saved_jobs & history</span><span>Lifecycle</span></div>
+      <div class="field-list">
+        <div><strong>saved_jobs:</strong> candidate_id, job_id</div>
+        <div><strong>status_history:</strong></div>
+        <div>• application_id (FK)</div>
+        <div>• old_status, new_status</div>
+        <div>• notes, changed_by_user_id</div>
+        <div>• created_at (DATETIME)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rel-line">
+    <strong>Key Cardinalities:</strong>
+    <code>users (1) ── (1) candidate_profiles</code> | 
+    <code>users (1) ── (1) recruiter_profiles (M) ── (1) companies</code> | 
+    <code>companies (1) ── (M) jobs</code> | 
+    <code>candidate_profiles (1) ── (M) [educations, experiences, skills, projects, certs]</code> | 
+    <code>jobs (1) ── (M) job_applications (M) ── (1) candidate_profiles</code> | 
+    <code>job_applications (1) ── (M) application_status_history</code> | 
+    <code>job_applications (1) ── (M) interviews</code>
+  </div>
+</div>
+</body>
+</html>
