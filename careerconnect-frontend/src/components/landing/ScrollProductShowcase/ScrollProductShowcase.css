@@ -10,7 +10,7 @@
    ------------------------------------------------------------------ */
 .cc-showcase-container {
   position: relative;
-  height: 190vh;
+  height: 220vh;
   background-color: #07090f;
   color: #f8fafc;
   /* Clip so the tilted device never causes horizontal overflow */
@@ -181,24 +181,24 @@
   flex: 1;
   min-height: 0; /* Critical: allows flex child to shrink below content size */
   width: 100%;
-  /* Device width: 90% of viewport width, never more than 900px */
-  max-width: min(90vw, 900px);
+  /* Device width: comfortably framed with breathing room */
+  max-width: min(92vw, 1020px);
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  /* perspective is set here so rotateX is calculated from this vantage */
+  /* Perspective vantage point */
   perspective: 1600px;
   perspective-origin: 50% 0%;
 }
 
 /* ------------------------------------------------------------------
    DEVICE SHELL: the 3D-transformed product window.
-   height = 100% of the perspective viewport so it fills the flex area.
+   Animation is driven directly by Framer Motion motion values.
    ------------------------------------------------------------------ */
 .cc-showcase-device {
   width: 100%;
-  /* Height is driven by the perspective-viewport's flex growth */
   height: 100%;
+  max-height: clamp(370px, 57svh, 530px);
   display: flex;
   flex-direction: column;
   background: #0b1120;
@@ -206,22 +206,12 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow:
     0 24px 60px -10px rgba(0, 0, 0, 0.75),
-    0 0 40px -8px var(--ambient-glow-color, rgba(99, 102, 241, 0.15)),
+    0 0 40px -8px rgba(99, 102, 241, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
   overflow: hidden;
-  /* 3D transform driven entirely by CSS custom properties.
-     Initial state: gentle 6° tilt – NOT 22°.
-     The JS writes --rotate-x (6 → 0), --scale (0.96 → 1), --translate-y (28 → 0).
-  */
-  transform:
-    rotateX(var(--rotate-x, 6deg))
-    scale(var(--scale, 0.96))
-    translateY(var(--translate-y, 28px));
-  transform-origin: center top;
   will-change: transform;
   transition: box-shadow 0.5s ease;
   text-align: left;
-  /* overflow: hidden clips the glass sheen pseudo-element correctly */
   position: relative;
 }
 
@@ -786,14 +776,6 @@
   .cc-showcase-perspective-viewport {
     max-width: 98vw;
     perspective: 900px;
-  }
-
-  /* Much less tilt on mobile */
-  .cc-showcase-device {
-    transform:
-      rotateX(calc(var(--rotate-x, 4deg) * 0.5))
-      scale(var(--scale, 0.98))
-      translateY(calc(var(--translate-y, 16px) * 0.4)) !important;
   }
 
   .cc-connect-grid,

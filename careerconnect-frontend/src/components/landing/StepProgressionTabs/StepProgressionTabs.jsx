@@ -13,8 +13,8 @@ import {
 } from 'lucide-react';
 import './StepProgressionTabs.css';
 
-// ─── Step Data & Sample Content ───────────────────────────────────────────────
-const STEPS = [
+// ─── Default Step Data ────────────────────────────────────────────────────────
+const DEFAULT_STAGES = [
   {
     id: 'discover',
     number: '01',
@@ -25,7 +25,6 @@ const STEPS = [
       'AI-driven skill matching pairs you with opportunities based on your proven competencies, domain experience, and compensation targets.',
     icon: Compass,
     accentColor: '#f59e0b',
-    badgeClass: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
     stats: [
       { label: 'Match Accuracy', val: '98.4%' },
       { label: 'Active Openings', val: '2,400+' }
@@ -49,7 +48,6 @@ const STEPS = [
       'Eliminate outdated paper resumes. Instant parsing validates your technical projects, certifications, and GitHub portfolio directly for engineering leads.',
     icon: UserCheck,
     accentColor: '#6366f1',
-    badgeClass: 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20',
     stats: [
       { label: 'Profile Trust Score', val: '99/100' },
       { label: 'Verified Skills', val: '14 Badges' }
@@ -73,7 +71,6 @@ const STEPS = [
       'Deliver rich, formatted application packets straight to decision-makers without filling out repetitive 20-page forms.',
     icon: SendHorizontal,
     accentColor: '#3b82f6',
-    badgeClass: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
     stats: [
       { label: 'Avg. Response Time', val: '24 Hours' },
       { label: 'Direct Referrals', val: '87%' }
@@ -97,7 +94,6 @@ const STEPS = [
       'Keep full transparency into your pipeline. Get automatic Google Meet interview links, round expectations, and structured compensation breakdowns.',
     icon: TrendingUp,
     accentColor: '#10b981',
-    badgeClass: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
     stats: [
       { label: 'Offer Conversion', val: '4.8x higher' },
       { label: 'Transparent Salary', val: '100%' }
@@ -113,12 +109,79 @@ const STEPS = [
   }
 ];
 
-export const StepProgressionTabs = () => {
-  const [activeIdx, setActiveIdx] = useState(0);
-  const currentStep = STEPS[activeIdx];
+/**
+ * StepProgressionTabs
+ * Supports both:
+ * 1. Controlled mode (as a compact tab bar in the ScrollProductShowcase)
+ * 2. Standalone mode (full interactive section with its own showcase card)
+ */
+export const StepProgressionTabs = ({
+  activeStage,
+  onStageSelect,
+  stages = DEFAULT_STAGES,
+  compact = false,
+  className = ''
+}) => {
+  const [internalIdx, setInternalIdx] = useState(0);
+  const isControlled = typeof activeStage === 'number';
+  const activeIdx = isControlled ? activeStage : internalIdx;
+  const currentStep = stages[activeIdx] || stages[0];
 
+  const handleSelect = (idx) => {
+    if (onStageSelect) {
+      onStageSelect(idx);
+    }
+    if (!isControlled) {
+      setInternalIdx(idx);
+    }
+  };
+
+  // ─── Compact Mode: Render only the animated tab navigation track ─────────
+  if (compact) {
+    return (
+      <div className={`spt-compact-track ${className}`} role="tablist" aria-label="Product Showcase Stages">
+        {stages.map((stage, idx) => {
+          const isActive = idx === activeIdx;
+          const accentColor = stage.accentColor || '#6366f1';
+
+          return (
+            <button
+              key={stage.id}
+              role="tab"
+              type="button"
+              aria-selected={isActive}
+              onClick={() => handleSelect(idx)}
+              className={`spt-compact-tab ${isActive ? 'spt-compact-tab--active' : 'spt-compact-tab--inactive'}`}
+            >
+              {/* Smooth Animated Sliding Highlight Pill */}
+              {isActive && (
+                <motion.div
+                  layoutId="sptCompactPill"
+                  transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                  className="spt-compact-pill-indicator"
+                  aria-hidden="true"
+                />
+              )}
+
+              <span className="spt-compact-content">
+                <span
+                  className={`spt-compact-num ${isActive ? 'spt-compact-num--active' : ''}`}
+                  style={isActive ? { color: accentColor } : undefined}
+                >
+                  {stage.number}
+                </span>
+                <span className="spt-compact-label">{stage.label}</span>
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    );
+  }
+
+  // ─── Standalone Mode: Full Section with Header & Showcase Card ────────────
   return (
-    <section className="spt-section" aria-label="Interactive Step Progression Tabs">
+    <section className={`spt-section ${className}`} aria-label="Interactive Step Progression Tabs">
       {/* ── Section Header ── */}
       <div className="spt-header">
         <div className="spt-pill-badge">
@@ -138,15 +201,17 @@ export const StepProgressionTabs = () => {
         <div className="spt-nav-line" aria-hidden="true" />
 
         <div className="spt-nav-grid" role="tablist">
-          {STEPS.map((step, idx) => {
+          {stages.map((step, idx) => {
             const isActive = idx === activeIdx;
+            const accentColor = step.accentColor || '#6366f1';
 
             return (
               <button
                 key={step.id}
                 role="tab"
+                type="button"
                 aria-selected={isActive}
-                onClick={() => setActiveIdx(idx)}
+                onClick={() => handleSelect(idx)}
                 className={`spt-tab-btn ${isActive ? 'spt-tab-btn--active' : 'spt-tab-btn--inactive'}`}
               >
                 {/* Smooth Animated Sliding Highlight Pill */}
@@ -155,6 +220,7 @@ export const StepProgressionTabs = () => {
                     layoutId="sptActiveTabPill"
                     transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                     className="spt-active-pill"
+                    aria-hidden="true"
                   />
                 )}
 
@@ -167,9 +233,9 @@ export const StepProgressionTabs = () => {
                     style={
                       isActive
                         ? {
-                            backgroundColor: `${step.accentColor}20`,
-                            borderColor: `${step.accentColor}40`,
-                            color: step.accentColor
+                            backgroundColor: `${accentColor}20`,
+                            borderColor: `${accentColor}40`,
+                            color: accentColor
                           }
                         : undefined
                     }
@@ -197,7 +263,7 @@ export const StepProgressionTabs = () => {
         <div
           className="spt-ambient-glow"
           style={{
-            background: `radial-gradient(circle, ${currentStep.accentColor}33 0%, transparent 70%)`
+            background: `radial-gradient(circle, ${currentStep.accentColor || '#6366f1'}33 0%, transparent 70%)`
           }}
           aria-hidden="true"
         />
@@ -233,7 +299,7 @@ export const StepProgressionTabs = () => {
                     width: '0.5rem',
                     height: '0.5rem',
                     borderRadius: '9999px',
-                    backgroundColor: currentStep.accentColor
+                    backgroundColor: currentStep.accentColor || '#6366f1'
                   }}
                 />
                 <span style={{ color: '#cbd5e1' }}>{currentStep.tagline}</span>
@@ -249,7 +315,7 @@ export const StepProgressionTabs = () => {
 
               {/* Stat Highlights */}
               <div className="spt-stats-grid">
-                {currentStep.stats.map((stat, i) => (
+                {currentStep.stats && currentStep.stats.map((stat, i) => (
                   <div key={i} className="spt-stat-box">
                     <div className="spt-stat-value">
                       {stat.val}
@@ -265,7 +331,7 @@ export const StepProgressionTabs = () => {
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', paddingTop: '0.5rem' }}>
                 <button
                   type="button"
-                  onClick={() => setActiveIdx((prev) => (prev + 1) % STEPS.length)}
+                  onClick={() => handleSelect((activeIdx + 1) % stages.length)}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -284,128 +350,130 @@ export const StepProgressionTabs = () => {
                   <ArrowRight style={{ width: '1rem', height: '1rem' }} />
                 </button>
                 <span style={{ fontSize: '0.75rem', color: '#64748b', fontFamily: 'monospace' }}>
-                  Step {activeIdx + 1} of {STEPS.length}
+                  Step {activeIdx + 1} of {stages.length}
                 </span>
               </div>
             </div>
 
             {/* Right Column: Visual Product Card Mock */}
-            <div className="spt-right-col">
-              <div className="spt-mock-card">
-                {/* Header Row */}
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    paddingBottom: '1rem',
-                    borderBottom: '1px solid rgba(51, 65, 85, 0.6)'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <div
-                      style={{
-                        width: '2.25rem',
-                        height: '2.25rem',
-                        borderRadius: '0.75rem',
-                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
-                        border: '1px solid rgba(99, 102, 241, 0.2)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#818cf8'
-                      }}
-                    >
-                      <Building2 style={{ width: '1.25rem', height: '1.25rem' }} />
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '0.875rem', fontWeight: 600, color: '#ffffff' }}>
-                        {currentStep.preview.company}
-                      </div>
-                      <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
-                        {currentStep.preview.salary}
-                      </div>
-                    </div>
-                  </div>
-
-                  <span
+            {currentStep.preview && (
+              <div className="spt-right-col">
+                <div className="spt-mock-card">
+                  {/* Header Row */}
+                  <div
                     style={{
-                      padding: '0.25rem 0.625rem',
-                      borderRadius: '0.375rem',
-                      fontSize: '0.6875rem',
-                      fontWeight: 600,
-                      border: `1px solid ${currentStep.accentColor}40`,
-                      backgroundColor: `${currentStep.accentColor}15`,
-                      color: currentStep.accentColor
-                    }}
-                  >
-                    {currentStep.preview.tag}
-                  </span>
-                </div>
-
-                {/* Role / Entity Title */}
-                <div>
-                  <h4 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#ffffff', letterSpacing: '-0.02em', margin: 0 }}>
-                    {currentStep.preview.role}
-                  </h4>
-                  <p
-                    style={{
-                      fontSize: '0.75rem',
-                      color: '#34d399',
-                      fontWeight: 500,
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '0.375rem',
-                      margin: '0.5rem 0 0 0'
+                      justifyContent: 'space-between',
+                      paddingBottom: '1rem',
+                      borderBottom: '1px solid rgba(51, 65, 85, 0.6)'
                     }}
                   >
-                    <CheckCircle2 style={{ width: '0.875rem', height: '0.875rem' }} />
-                    <span>{currentStep.preview.statusText}</span>
-                  </p>
-                </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <div
+                        style={{
+                          width: '2.25rem',
+                          height: '2.25rem',
+                          borderRadius: '0.75rem',
+                          backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                          border: '1px solid rgba(99, 102, 241, 0.2)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: '#818cf8'
+                        }}
+                      >
+                        <Building2 style={{ width: '1.25rem', height: '1.25rem' }} />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '0.875rem', fontWeight: 600, color: '#ffffff' }}>
+                          {currentStep.preview.company}
+                        </div>
+                        <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                          {currentStep.preview.salary}
+                        </div>
+                      </div>
+                    </div>
 
-                {/* Skills Pill Cluster */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem', paddingTop: '0.25rem' }}>
-                  {currentStep.preview.skills.map((skill, sIdx) => (
                     <span
-                      key={sIdx}
                       style={{
                         padding: '0.25rem 0.625rem',
                         borderRadius: '0.375rem',
                         fontSize: '0.6875rem',
-                        fontWeight: 500,
-                        backgroundColor: 'rgba(30, 41, 59, 0.8)',
-                        border: '1px solid rgba(51, 65, 85, 0.5)',
-                        color: '#cbd5e1'
+                        fontWeight: 600,
+                        border: `1px solid ${currentStep.accentColor || '#6366f1'}40`,
+                        backgroundColor: `${currentStep.accentColor || '#6366f1'}15`,
+                        color: currentStep.accentColor || '#6366f1'
                       }}
                     >
-                      {skill}
+                      {currentStep.preview.tag}
                     </span>
-                  ))}
-                </div>
-
-                {/* Interactive Mock Footer */}
-                <div
-                  style={{
-                    padding: '0.75rem',
-                    borderRadius: '0.75rem',
-                    backgroundColor: 'rgba(2, 6, 23, 0.6)',
-                    border: '1px solid rgba(30, 41, 59, 0.8)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    fontSize: '0.75rem',
-                    color: '#94a3b8'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <ShieldCheck style={{ width: '1rem', height: '1rem', color: '#34d399' }} />
-                    <span>Verified Pipeline Status</span>
                   </div>
-                  <span style={{ fontFamily: 'monospace', color: '#818cf8' }}>Live Sync</span>
+
+                  {/* Role / Entity Title */}
+                  <div>
+                    <h4 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#ffffff', letterSpacing: '-0.02em', margin: 0 }}>
+                      {currentStep.preview.role}
+                    </h4>
+                    <p
+                      style={{
+                        fontSize: '0.75rem',
+                        color: '#34d399',
+                        fontWeight: 500,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.375rem',
+                        margin: '0.5rem 0 0 0'
+                      }}
+                    >
+                      <CheckCircle2 style={{ width: '0.875rem', height: '0.875rem' }} />
+                      <span>{currentStep.preview.statusText}</span>
+                    </p>
+                  </div>
+
+                  {/* Skills Pill Cluster */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem', paddingTop: '0.25rem' }}>
+                    {currentStep.preview.skills && currentStep.preview.skills.map((skill, sIdx) => (
+                      <span
+                        key={sIdx}
+                        style={{
+                          padding: '0.25rem 0.625rem',
+                          borderRadius: '0.375rem',
+                          fontSize: '0.6875rem',
+                          fontWeight: 500,
+                          backgroundColor: 'rgba(30, 41, 59, 0.8)',
+                          border: '1px solid rgba(51, 65, 85, 0.5)',
+                          color: '#cbd5e1'
+                        }}
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Interactive Mock Footer */}
+                  <div
+                    style={{
+                      padding: '0.75rem',
+                      borderRadius: '0.75rem',
+                      backgroundColor: 'rgba(2, 6, 23, 0.6)',
+                      border: '1px solid rgba(30, 41, 59, 0.8)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      fontSize: '0.75rem',
+                      color: '#94a3b8'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <ShieldCheck style={{ width: '1rem', height: '1rem', color: '#34d399' }} />
+                      <span>Verified Pipeline Status</span>
+                    </div>
+                    <span style={{ fontFamily: 'monospace', color: '#818cf8' }}>Live Sync</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </motion.div>
         </AnimatePresence>
       </div>
