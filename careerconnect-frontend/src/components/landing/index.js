@@ -1,0 +1,1 @@
+export { ScrollProductShowcase } from './ScrollProductShowcase';

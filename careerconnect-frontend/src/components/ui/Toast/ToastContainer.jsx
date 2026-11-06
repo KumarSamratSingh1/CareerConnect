@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { CheckCircle2, AlertCircle, Info, AlertTriangle, X } from 'lucide-react';
 import './Toast.css';
 
@@ -13,24 +13,24 @@ const ToastItem = ({ toast, onClose }) => {
   const [isExiting, setIsExiting] = useState(false);
   const [progress, setProgress] = useState(100);
   const duration = toast.duration || 4000;
-  const startTimeRef = useRef(Date.now());
-  const timerRef = useRef(null);
+  const startTimeRef = useRef(null);
   const isPausedRef = useRef(false);
 
   const IconComponent = TOAST_ICONS[toast.type] || Info;
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setIsExiting(true);
     setTimeout(() => {
       onClose(toast.id);
     }, 200);
-  };
+  }, [onClose, toast.id]);
 
   useEffect(() => {
+    startTimeRef.current = Date.now();
     const updateInterval = 50;
     const interval = setInterval(() => {
       if (isPausedRef.current) return;
-      const elapsed = Date.now() - startTimeRef.current;
+      const elapsed = Date.now() - (startTimeRef.current || Date.now());
       const remaining = Math.max(0, 100 - (elapsed / duration) * 100);
       setProgress(remaining);
       if (elapsed >= duration) {
@@ -40,7 +40,7 @@ const ToastItem = ({ toast, onClose }) => {
     }, updateInterval);
 
     return () => clearInterval(interval);
-  }, [duration]);
+  }, [duration, handleClose]);
 
   return (
     <div

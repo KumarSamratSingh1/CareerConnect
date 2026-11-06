@@ -1,15 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  Sparkles,
   Search,
   ArrowRight,
-  Code,
-  Cpu,
-  Layout,
-  Palette,
-  Cloud,
-  GraduationCap,
   CheckCircle,
   CheckCircle2,
   Users,
@@ -23,17 +16,15 @@ import {
   Building2,
   TrendingUp,
   Clock,
-  ArrowUpRight,
   Lock,
-  Layers,
-  Sliders,
   ChevronRight,
   CheckCheck
 } from 'lucide-react';
 import { Navbar, Footer } from '../../components/layout';
 import { Button, Badge } from '../../components/ui';
 import { JobCard } from '../../components/jobs';
-import { CATEGORIES, getFeaturedJobs } from '../../data/mockJobs';
+import { ScrollProductShowcase } from '../../components/landing';
+import { getFeaturedJobs } from '../../data/mockJobs';
 import { jobService } from '../../api';
 import './HomePage.css';
 
@@ -75,15 +66,6 @@ const AnimatedCounter = ({ target, suffix = '', duration = 1200 }) => {
   }, [target, duration]);
 
   return <span>{count.toLocaleString()}{suffix}</span>;
-};
-
-const CATEGORY_ICONS = {
-  Code: Code,
-  Cpu: Cpu,
-  Layout: Layout,
-  Palette: Palette,
-  Cloud: Cloud,
-  GraduationCap: GraduationCap
 };
 
 // Interactive discovery presets for Section 2
@@ -551,6 +533,12 @@ export const HomePage = () => {
           </div>
         </div>
       </section>
+
+      {/* ==========================================================================
+          CINEMATIC PINNED 3D MOTION SHOWCASE: "From discovery to opportunity."
+          Scroll-driven perspective transform & lifecycle product demonstration
+          ========================================================================== */}
+      <ScrollProductShowcase />
 
       {/* ==========================================================================
           SECTION 2: "Find the opportunity that fits you." (Job Discovery Visualized)

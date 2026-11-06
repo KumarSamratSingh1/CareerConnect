@@ -78,7 +78,7 @@ export const LoginPage = () => {
         setIsLoading(false);
       }
     },
-    [loginWithGoogle, handleAuthRedirect]
+    [loginWithGoogle, handleAuthRedirect, toast]
   );
 
   useEffect(() => {
